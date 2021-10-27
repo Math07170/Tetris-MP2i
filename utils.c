@@ -3,11 +3,31 @@
 #include <stdio.h>
 #include <time.h>
 
-void wait(unsigned int towait){
+
+tetromino I = {
+    3,
+    0,
+    {
+        {
+            {0,0,0,0},
+            {7,7,7,7},
+            {0,0,0,0},
+            {0,0,0,0}
+        },
+        {
+            {0,0,7,0},
+            {0,0,7,0},
+            {0,0,7,0},
+            {0,0,7,0}
+        }
+    },
+    1
+};
+
+void wait(double towait){
     clock_t end = time(NULL) + towait;
     clock_t current = time(NULL);
-
-    while(difftime(current,end)<=0){
+    while(difftime(end,current)>=0.0){
         sleep( difftime(end, current) *(99.0/100.0) );
         current = time(NULL);
     }

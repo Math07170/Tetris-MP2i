@@ -1,3 +1,8 @@
 *.o
 tetris
 grille
+*.log
+*.json
+*.o
+*.o
+*.o

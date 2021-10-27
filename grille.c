@@ -18,6 +18,7 @@ void init_ncurses(){
  * La grille est à deux colonnes du bord supérieur et une ligne du bord supérieur du terminal
  * Ne contient pas encore l'emplacement pour le bloc suivant, la réserve, etc. */
 void affiche_grille(int grille[20][10]){
+	erase();
 	for(int i = 2; i < 22; i++){	//	Lignes verticales
 		mvaddch(i,2,ACS_VLINE);
 		mvaddch(i,23,ACS_VLINE);

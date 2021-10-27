@@ -1,6 +1,6 @@
 tetris: utils.o main.o grille.o
 	gcc utils.o main.o grille.o -o tetris -lncurses
-main.o: main.c grille.h
+main.o: main.c grille.h utils.h
 	gcc -c main.c -lncurses
 grille.o: grille.c
 	gcc -c grille.c -lncurses

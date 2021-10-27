@@ -1,13 +1,48 @@
 #include <stdlib.h>
 #include <ncurses.h>
 #include "grille.h"
+#include <unistd.h>
+#include "utils.h"
 
+int grille[20][10];
+
+gamestate state = {
+	0,
+	0,
+	0,
+	0,
+	1.0
+};
+
+int tick_count = 0;
+void tick(){
+    affiche_grille(grille);
+	char c = getch();
+	if(c == 'd'){
+		for(int i =0; i<4; i++){
+			for(int j = 0; j<4; j++){
+				if(I.rotations[0][i][j] != 0){
+					grille[state.y+i-1][state.x+j] = 0;
+					grille[state.y+i][state.x+j] = 7;
+				}
+			}
+		}
+	}
+    sleep((1.0/60.0));
+	tick_count++;
+	if(tick_count==1){
+		tick_count = 0;
+		state.y += 1;
+		printf("Ok");
+	}
+	tick();
+}
 int main() {
+	state.block = 1;
+	state.x = I.spawn_x;
+	state.y = I.spawn_y;
     init_ncurses();
-    int grille[20][10];
     initialise_grille(grille);
-
-
 
 	grille[16][9] = 7; // Test avec la couleur cyan (bloc I)
 	grille[17][9] = 7;
@@ -28,8 +63,7 @@ int main() {
 	grille[13][4] = 5;
 	grille[13][5] = 5;
 	
-	affiche_grille(grille);
-	char c = getch();	// Unique moyen que j'ai trouvé pour que l'affichage reste à l'écran...
+	tick();
 	endwin();
 	return 0;
 }
