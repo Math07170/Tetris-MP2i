@@ -26,14 +26,12 @@ void tick(){
 
 	tick_count++;
 	printf("%d", tick_count);
-	if(tick_count==20){
+	if(tick_count==60){
 		tick_count = 0;
 		state.y += 1;
-
 		for(int i =0; i<4; i++){
 			for(int j = 0; j<4; j++){
-				if(I.rotations[0][i][j] != 0){
-					printf("Test");
+				if(tab[state.block-1].rotations[state.rotation_index][i][j] != 0){
 					grille[state.y+i-1][state.x+j] = 0;
 					grille[state.y+i][state.x+j] = state.block;
 				}
@@ -44,9 +42,10 @@ void tick(){
 	tick();
 }
 int main() {
-	state.block = 7;
-	state.x = I.spawn_x;
-	state.y = I.spawn_y;
+	init_tetrominos();
+	state.block = 6;
+	state.x = tab[state.block-1].spawn_x;
+	state.y = tab[state.block-1].spawn_y;
     init_ncurses();
     initialise_grille(grille);
 

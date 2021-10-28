@@ -3,22 +3,25 @@
 
 #include <time.h>
 
-void wait(double time);
-typedef struct tetrominos {
+typedef struct {
     int spawn_x;
     int spawn_y;
     int rotation_max;
-    int rotations[9][4][4];
+    int rotations[4][4][4];
     int id;
 } tetromino;
 
-typedef struct gamestates{
+void wait(double time);
+void init_tetrominos();
+
+typedef struct {
     int block;
     int rotation_index;
     int x;
     int y;
     float game_speed;
 } gamestate;
-extern tetromino I;
+
+extern tetromino tab[];
 
 #endif
