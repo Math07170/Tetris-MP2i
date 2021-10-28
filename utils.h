@@ -7,6 +7,7 @@ void wait(double time);
 typedef struct tetrominos {
     int spawn_x;
     int spawn_y;
+    int rotation_max;
     int rotations[9][4][4];
     int id;
 } tetromino;
