@@ -25,7 +25,6 @@ void tick(){
 
 
 	tick_count++;
-	printf("%d", tick_count);
 	if(tick_count==60){
 		tick_count = 0;
 		state.y += 1;
