@@ -1,8 +1,10 @@
 #include <ncurses.h>
-
+#include <stdbool.h>
 void init_ncurses(){
 	initscr();
 	noecho();
+	nodelay(stdscr, TRUE);
+	cbreak();
 	start_color();
 	init_pair(1,COLOR_WHITE,COLOR_WHITE);	// Couleur des blocs O
 	init_pair(2,COLOR_WHITE,COLOR_RED);		// Couleur des blocs Z

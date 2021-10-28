@@ -19,26 +19,32 @@ void tick(){
     affiche_grille(grille);
 	char c = getch();
 	if(c == 'd'){
+		printw("D");
+	}
+    usleep(16666);
+
+
+	tick_count++;
+	printf("%d", tick_count);
+	if(tick_count==20){
+		tick_count = 0;
+		state.y += 1;
+
 		for(int i =0; i<4; i++){
 			for(int j = 0; j<4; j++){
 				if(I.rotations[0][i][j] != 0){
+					printf("Test");
 					grille[state.y+i-1][state.x+j] = 0;
-					grille[state.y+i][state.x+j] = 7;
+					grille[state.y+i][state.x+j] = state.block;
 				}
 			}
 		}
-	}
-    sleep((1.0/60.0));
-	tick_count++;
-	if(tick_count==1){
-		tick_count = 0;
-		state.y += 1;
-		printf("Ok");
+
 	}
 	tick();
 }
 int main() {
-	state.block = 1;
+	state.block = 7;
 	state.x = I.spawn_x;
 	state.y = I.spawn_y;
     init_ncurses();
