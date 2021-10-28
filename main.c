@@ -3,6 +3,7 @@
 #include "grille.h"
 #include <unistd.h>
 #include "utils.h"
+#include "tetromino.h"
 
 int grille[20][10];
 
