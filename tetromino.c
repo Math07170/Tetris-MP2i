@@ -1,5 +1,6 @@
 #include "tetromino.h"
 #include <stdio.h>
+#include "utils.h"
 
 tetromino tab[7];
 
@@ -190,4 +191,26 @@ void init_tetrominos(){
 		1
 	};
 	tab[0] = O;
+}
+
+void efface(gamestate state, int grille[20][10]){
+    for(int i =0; i<4; i++){
+		for(int j = 0; j<4; j++){
+            if(tab[state.block-1].rotations[state.rotation_index][i][j] != 0){
+                grille[state.y+i][state.x+j] = 0;
+            }
+
+		}
+	}
+}
+
+void draw(gamestate state, int grille[20][10]){
+    for(int i =0; i<4; i++){
+		for(int j = 0; j<4; j++){
+            if(tab[state.block-1].rotations[state.rotation_index][i][j] != 0){
+                grille[state.y+i][state.x+j] = state.block;
+            }
+
+		}
+	}
 }

@@ -22,25 +22,17 @@ void tick(){
 	if(c == 'd'){
 		printw("D");
 	}
-    usleep(16666);
+    
 
 
 	tick_count++;
-	if(tick_count==60){
+	if(tick_count==600){
 		tick_count = 0;
+		efface(state, grille);
 		state.y += 1;
-		for(int i =0; i<4; i++){
-			for(int j = 0; j<4; j++){
-				if(tab[state.block-1].rotations[state.rotation_index][i][j] != 0){
-					if(tab[state.block-1].rotations[state.rotation_index][i-1][j] == 0){
-						grille[state.y+i-1][state.x+j] = 0;
-					}
-					grille[state.y+i][state.x+j] = state.block;
-				}
-			}
-		}
-
+		draw(state, grille);
 	}
+	usleep(16666);
 	tick();
 }
 int main() {
@@ -50,6 +42,7 @@ int main() {
 	state.y = tab[state.block-1].spawn_y;
     init_ncurses();
     initialise_grille(grille);
+	draw(state, grille);
 
 	grille[16][9] = 7; // Test avec la couleur cyan (bloc I)
 	grille[17][9] = 7;
