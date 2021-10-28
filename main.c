@@ -31,7 +31,9 @@ void tick(){
 		for(int i =0; i<4; i++){
 			for(int j = 0; j<4; j++){
 				if(tab[state.block-1].rotations[state.rotation_index][i][j] != 0){
-					grille[state.y+i-1][state.x+j] = 0;
+					if(tab[state.block-1].rotations[state.rotation_index][i-1][j] == 0){
+						grille[state.y+i-1][state.x+j] = 0;
+					}
 					grille[state.y+i][state.x+j] = state.block;
 				}
 			}
@@ -42,7 +44,7 @@ void tick(){
 }
 int main() {
 	init_tetrominos();
-	state.block = 6;
+	state.block = 1;
 	state.x = tab[state.block-1].spawn_x;
 	state.y = tab[state.block-1].spawn_y;
     init_ncurses();
