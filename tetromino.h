@@ -16,5 +16,5 @@ void init_tetrominos();
 extern tetromino tab[];
 
 void efface(gamestate state, int grille[20][10]);
-void draw(gamestate state, int grille[20][10]);
+void dessine(gamestate state, int grille[20][10]);
 #endif

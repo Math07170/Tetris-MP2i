@@ -30,7 +30,7 @@ void tick(){
 		tick_count = 0;
 		efface(state, grille);
 		state.y += 1;
-		draw(state, grille);
+		dessine(state, grille);
 	}
 	usleep(16666);
 	tick();
@@ -42,7 +42,7 @@ int main() {
 	state.y = tab[state.block-1].spawn_y;
     init_ncurses();
     initialise_grille(grille);
-	draw(state, grille);
+	dessine(state, grille);
 
 	grille[16][9] = 7; // Test avec la couleur cyan (bloc I)
 	grille[17][9] = 7;

@@ -1,5 +1,7 @@
 #include <ncurses.h>
 #include <stdbool.h>
+
+/* Initialise ncurses */
 void init_ncurses(){
 	initscr();
 	noecho();
@@ -51,6 +53,8 @@ void affiche_grille(int grille[20][10]){
 	refresh();
 	return;
 }
+
+/* Vide la grille (la remplit de zéros) */
 void initialise_grille(int grille[20][10]){
 	for(int i = 0; i < 20; i++){
 		for(int j = 0; j < 10; j ++){
