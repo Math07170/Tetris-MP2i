@@ -17,6 +17,7 @@ void init_ncurses(){
 	init_pair(7,COLOR_WHITE,COLOR_CYAN);	// Couleur des blocs I
 	init_pair(8,COLOR_WHITE,COLOR_BLACK);	// Couleur des contours (équivaut à pas de couleur du tout...)
 }
+
 /* Vérifie qu'une case est disponible */
 bool case_disponible(int grille[20][10], int i, int j){
 	if(i<0 || i>=20 || j>=10 || j < 0) return false;
@@ -25,7 +26,6 @@ bool case_disponible(int grille[20][10], int i, int j){
 		return false;
 	} 
 }
-
 
 /* Affiche la deuxième version de la grille de jeu (pouvant contenir des blocs)
  * La grille est à deux colonnes du bord supérieur et une ligne du bord supérieur du terminal

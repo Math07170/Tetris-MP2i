@@ -5,7 +5,6 @@
 
 void wait(double time);
 
-
 typedef struct {
     int block;
     int rotation_index;

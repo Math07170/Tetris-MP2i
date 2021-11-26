@@ -195,16 +195,18 @@ void init_tetrominos(){
 	};
 	tab[0] = O;
 }
+
 /* Efface une case de la grille */
 void efface(int grille[20][10], int i, int j){
 	grille[i][j] = 0;
 }
+
 /* Efface le tetromino en cours de descente */
 void efface_tetromino(int grille[20][10], gamestate* p_state){
-	for(int i =4; i>=0; i--){
-		for(int j = 4; j>=0; j--){
-            if(tab[p_state->block-1].rotations[p_state->rotation_index][i][j] != 0){
-				efface(grille, p_state->y+i, p_state->x+j);
+	for(int i = 3; i >= 0; i--){
+		for(int j = 3; j >= 0; j--){
+            if(tab[p_state -> block-1].rotations[p_state->rotation_index][i][j] != 0){
+				efface(grille, p_state -> y+i, p_state -> x+j);
             }
 		}
 		
@@ -215,10 +217,11 @@ void efface_tetromino(int grille[20][10], gamestate* p_state){
 void dessine(int grille[20][10], int i, int j, int block){
 	grille[i][j] = block;
 }
+
 /* Affiche le tetromino en cours de descente */
 void dessine_tetromino(int grille[20][10], gamestate* p_state){
-	for(int i =4; i>=0; i--){
-		for(int j = 4; j>=0; j--){
+	for(int i = 3; i >= 0; i--){
+		for(int j = 3; j >= 0; j--){
             if(tab[p_state->block-1].rotations[p_state->rotation_index][i][j] != 0){				
 				dessine(grille, p_state->y+i, p_state->x+j, p_state->block);
             }
@@ -228,8 +231,8 @@ void dessine_tetromino(int grille[20][10], gamestate* p_state){
 
 /* Teste la validité d'une position */
 bool mouvement_valide(int grille[20][10], gamestate state){
-	for(int i =4; i>=0; i--){
-		for(int j = 4; j>=0; j--){
+	for(int i = 3; i >= 0; i--){
+		for(int j = 3; j >= 0; j--){
             if(tab[state.block-1].rotations[state.rotation_index][i][j] != 0){				
 				if(case_disponible(grille, state.y+i, state.x+j) == true){
 					continue;
@@ -243,6 +246,7 @@ bool mouvement_valide(int grille[20][10], gamestate state){
 	return true;
 }
 
+/* Fait descendre le tetromino */
 void descend(gamestate* p_state, int grille[20][10]){
 	gamestate temp = *p_state;
 	temp.y++;
@@ -257,14 +261,14 @@ void descend(gamestate* p_state, int grille[20][10]){
 
 	
 }
+
 /* Déplace le tetromino vers la droite */
 void deplace_droite(gamestate* p_state, int grille[20][10]){
 	gamestate temp = *p_state;
 	temp.x++;
 	efface_tetromino(grille, p_state);
 	if(mouvement_valide(grille, temp)){
-		*p_state = temp;
-		
+		*p_state = temp;		
 	}
 	dessine_tetromino(grille, p_state);
 }
@@ -275,19 +279,30 @@ void deplace_gauche(gamestate* p_state, int grille[20][10]){
 	temp.x--;
 	efface_tetromino(grille, p_state);
 	if(mouvement_valide(grille, temp)){
-		*p_state = temp;
-		
+		*p_state = temp;		
 	}
 	dessine_tetromino(grille, p_state);
 }
 
-/* Tourne le tetromino dans le sens horaire */
-void tourne_horaire(gamestate* p_state, int grille[20][10]){
-
+/* Tourne le tetromino dans le sens direct */
+void tourne_direct(gamestate* p_state, int grille[20][10]){
+	gamestate temp = *p_state;
+	temp.rotation_index = (temp.rotation_index - 1)%(tab[temp.block].rotation_max + 1);
+		efface_tetromino(grille, p_state);
+	if(mouvement_valide(grille, temp)){
+		*p_state = temp;		
+	}
+	dessine_tetromino(grille, p_state);
 }
 
-/* Tourne le tetromino dans le sens anti horaire */
-void tourne_antihorraire(gamestate* p_state, int grille[20][10]){
-
+/* Tourne le tetromino dans le sens indirect */
+void tourne_indirect(gamestate* p_state, int grille[20][10]){
+	gamestate temp = *p_state;
+	temp.rotation_index = (temp.rotation_index + 1)%(tab[temp.block].rotation_max + 1);
+		efface_tetromino(grille, p_state);
+	if(mouvement_valide(grille, temp)){
+		*p_state = temp;		
+	}
+	dessine_tetromino(grille, p_state);
 }
 

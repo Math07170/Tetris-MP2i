@@ -19,22 +19,23 @@ gamestate state = {
 
 int play = 0;
 int tick_count = 0;
+
 void tick(){
-    
     while(play == 0){
-
 		char a = getch();
-		if(a =='d') deplace_droite(&state, grille);
-		else if(a=='q') deplace_gauche(&state, grille);
-
+		if(a == 'd') deplace_droite(&state, grille);
+		else if (a == 'q') deplace_gauche(&state, grille);
+		else if (a == 'l') tourne_direct(&state, grille);
+		else if (a == 'p') tourne_indirect(&state, grille);
 		affiche_grille(grille);
 		descend(&state, grille);
 		usleep(166666);
 	}
 }
+
 int main() {
 	init_tetrominos();
-	state.block = 1;
+	state.block = 2;
 	state.x = tab[state.block-1].spawn_x;
 	state.y = tab[state.block-1].spawn_y;
     init_ncurses();
