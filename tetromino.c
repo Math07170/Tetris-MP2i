@@ -264,8 +264,9 @@ void deplace_droite(gamestate* p_state, int grille[20][10]){
 	efface_tetromino(grille, p_state);
 	if(mouvement_valide(grille, temp)){
 		*p_state = temp;
-		dessine_tetromino(grille, p_state);	
+		
 	}
+	dessine_tetromino(grille, p_state);	
 }
 
 /* Déplace le tetromino vers la gauche */
