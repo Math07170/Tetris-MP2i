@@ -249,12 +249,11 @@ void descend(gamestate* p_state, int grille[20][10]){
 	efface_tetromino(grille, p_state);
 	if(mouvement_valide(grille, temp)){
 		*p_state = temp;
-		dessine_tetromino(grille, p_state);	
 	}
 	else{
 		/* TODO : Arrêt du block spawn d'un nouveau */
 	}
-	
+	dessine_tetromino(grille, p_state);	
 
 	
 }
