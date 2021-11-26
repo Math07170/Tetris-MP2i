@@ -1,7 +1,8 @@
+#include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 #include <ncurses.h>
 #include "grille.h"
-#include <unistd.h>
 #include "utils.h"
 #include "tetromino.h"
 
@@ -15,25 +16,18 @@ gamestate state = {
 	1.0
 };
 
+
+int play = 0;
 int tick_count = 0;
 void tick(){
-    affiche_grille(grille);
-	char c = getch();
-	if(c == 'd'){
-		printw("D");
-	}
     
-
-
-	tick_count++;
-	if(tick_count==600){
-		tick_count = 0;
-		efface(state, grille);
-		state.y += 1;
-		dessine(state, grille);
+    while(play == 0){
+		char a = getch();
+		if(a =='d') deplace_droite(&state, grille);
+		affiche_grille(grille);
+		descend(&state, grille);
+		sleep(1);
 	}
-	usleep(16666);
-	tick();
 }
 int main() {
 	init_tetrominos();
@@ -42,7 +36,6 @@ int main() {
 	state.y = tab[state.block-1].spawn_y;
     init_ncurses();
     initialise_grille(grille);
-	dessine(state, grille);
 
 	grille[16][9] = 7; // Test avec la couleur cyan (bloc I)
 	grille[17][9] = 7;
