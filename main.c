@@ -22,11 +22,14 @@ int tick_count = 0;
 void tick(){
     
     while(play == 0){
+
 		char a = getch();
 		if(a =='d') deplace_droite(&state, grille);
+		else if(a=='q') deplace_gauche(&state, grille);
+
 		affiche_grille(grille);
 		descend(&state, grille);
-		sleep(1);
+		usleep(166666);
 	}
 }
 int main() {

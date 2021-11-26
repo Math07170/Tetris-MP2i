@@ -17,4 +17,5 @@ extern tetromino tab[];
 
 void descend(gamestate* state, int grille[20][10]);
 void deplace_droite(gamestate* state, int grille[20][10]);
+void deplace_gauche(gamestate* state, int grille[20][10]);
 #endif

@@ -196,8 +196,8 @@ void init_tetrominos(){
 	tab[0] = O;
 }
 /* Efface une case de la grille */
-void efface(int grille[20][10], int x, int y){
-	grille[x][y] = 0;
+void efface(int grille[20][10], int i, int j){
+	grille[i][j] = 0;
 }
 /* Efface le tetromino en cours de descente */
 void efface_tetromino(int grille[20][10], gamestate* p_state){
@@ -266,21 +266,28 @@ void deplace_droite(gamestate* p_state, int grille[20][10]){
 		*p_state = temp;
 		
 	}
-	dessine_tetromino(grille, p_state);	
+	dessine_tetromino(grille, p_state);
 }
 
 /* Déplace le tetromino vers la gauche */
-void deplace_gauche(gamestate* state, int grille[20][10]){
-
+void deplace_gauche(gamestate* p_state, int grille[20][10]){
+	gamestate temp = *p_state;
+	temp.x--;
+	efface_tetromino(grille, p_state);
+	if(mouvement_valide(grille, temp)){
+		*p_state = temp;
+		
+	}
+	dessine_tetromino(grille, p_state);
 }
 
 /* Tourne le tetromino dans le sens horaire */
-void tourne_horaire(gamestate* state, int grille[20][10]){
+void tourne_horaire(gamestate* p_state, int grille[20][10]){
 
 }
 
 /* Tourne le tetromino dans le sens anti horaire */
-void tourne_antihorraire(gamestate* state, int grille[20][10]){
+void tourne_antihorraire(gamestate* p_state, int grille[20][10]){
 
 }
 
