@@ -361,10 +361,46 @@ void tourne_indirect(gamestate* p_state, int grille[20][10]){
 	dessine_tetromino(grille, p_state);
 }
 
-/* Modifie l'état du jeu pour faire apparaître un tetromino aléatoire en haut de la grille de jeu */
+/* Modifie l'état du jeu pour faire apparaître un tetromino aléatoire en haut de la grille de jeu */			// L'ordre aléatoire est à améliorer
 void nouveau_tetromino(gamestate* p_state){
 	p_state -> block = (rand() % 7) + 1;
 	p_state -> rotation_index = 0;
 	p_state -> x = tab[p_state -> block-1].spawn_x;
 	p_state -> y = tab[p_state -> block-1].spawn_y;
+}
+
+/* Copie le tetromino du gamestate dans la grille de jeu */			// Problème de clignotement à régler
+void fixe_tetromino(gamestate state, int grille[20][10]){
+	for(int i = 0; i <= 3; i++){
+		for(int j = 0; j <= 3; j++){
+			if(tab[state.block - 1].rotations[state.rotation_index][i][j] != 0){
+				grille[state.y + i][state.x + j] = tab[state.block - 1].rotations[state.rotation_index][i][j];
+			}
+		}
+	}
+	return;
+}
+
+/* Vérifie toutes les lignes de la grille et supprime  celles qui sont pleines */			// Ne fonctionne pas
+void nettoie_grille(int grille[20][10]){
+	bool ligne_pleine;
+	int i;
+	int j = 0;
+	for(i = 0; i < 20; i++){			// Pour toutes les lignes de la grille, de haut en bas...
+		ligne_pleine = true;
+		while(ligne_pleine == true && j < 10){			// ...vérifie si la ligne est pleine...
+			if(grille[i][j] == 0){
+				ligne_pleine = false;
+			}
+			j++;
+		}
+		if(ligne_pleine = true){			// ...et si oui, la supprime en faisant descendre d'une ligne les lignes supérieures 
+			for(int k = 1; k <= i; k++){
+				for(int l = 0; l < 10; l++){
+					grille[k][l] = grille[k - 1][l];
+				}	
+			}
+		}
+	}
+	return;
 }

@@ -21,6 +21,7 @@ int play = 0;
 int tick_count = 0;
 
 void tick(){
+	nettoie_grille(grille);			// Ne fonctionne pas...
 	nouveau_tetromino(&state);
 	bool descente_possible = true;
     while(play == 0){
@@ -33,7 +34,7 @@ void tick(){
 		if(descente_possible == true){
 			descente_possible = descend(&state, grille);
 		}else{
-			// TODO : Garder le précédent tetromino dans la grille
+			fixe_tetromino(state, grille);
 			nouveau_tetromino(&state);
 			descente_possible = true;
 		}
@@ -46,20 +47,18 @@ int main() {
     init_ncurses();
     initialise_grille(grille);
 
-	grille[16][9] = 7; // Test avec la couleur cyan (bloc I)
-	grille[17][9] = 7;
-	grille[18][9] = 7;
-	grille[19][9] = 7;
-	
-	grille[19][8] = 6; // Test avec la couleur magenta (bloc T)
-	grille[19][7] = 6;
-	grille[19][6] = 6;
-	grille[18][7] = 6;
-
-	grille[19][0] = 3;	// Test avec divers blocs un peu partout
-	grille[5][7] = 4;
-	grille[13][4] = 5;
-	grille[13][5] = 5;
+	//grille[16][9] = 7;
+	//grille[17][9] = 7;
+	//grille[18][9] = 7;
+	//grille[19][9] = 7;
+	//grille[19][8] = 6;
+	//grille[19][7] = 6;
+	//grille[19][6] = 6;
+	//grille[18][7] = 6;
+	//grille[19][0] = 3;
+	//grille[5][7] = 4;
+	//grille[13][4] = 5;
+	//grille[13][5] = 5;
 	
 	tick();
 	endwin();
