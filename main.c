@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <ncurses.h>
+#include <stdbool.h>
 #include "grille.h"
 #include "utils.h"
 #include "tetromino.h"
@@ -16,11 +17,12 @@ gamestate state = {
 	1.0
 };
 
-
 int play = 0;
 int tick_count = 0;
 
 void tick(){
+	nouveau_tetromino(&state);
+	bool descente_possible = true;
     while(play == 0){
 		char a = getch();
 		if(a == 'd') deplace_droite(&state, grille);
@@ -28,16 +30,19 @@ void tick(){
 		else if (a == 'l') tourne_direct(&state, grille);
 		else if (a == 'p') tourne_indirect(&state, grille);
 		affiche_grille(grille);
-		descend(&state, grille);
+		if(descente_possible == true){
+			descente_possible = descend(&state, grille);
+		}else{
+			// TODO : Garder le précédent tetromino dans la grille
+			nouveau_tetromino(&state);
+			descente_possible = true;
+		}
 		usleep(166666);
 	}
 }
 
 int main() {
 	init_tetrominos();
-	state.block = 1;
-	state.x = tab[state.block-1].spawn_x;
-	state.y = tab[state.block-1].spawn_y;
     init_ncurses();
     initialise_grille(grille);
 

@@ -1,6 +1,8 @@
 #ifndef TETROMINO_H
 #define TETROMINO_H
+
 #include "utils.h"
+#include <stdbool.h>
 
 typedef struct {
     int spawn_x;
@@ -13,10 +15,11 @@ typedef struct {
 void init_tetrominos();
 extern tetromino tab[];
 
-void descend(gamestate* state, int grille[20][10]);
+bool descend(gamestate* state, int grille[20][10]);
 void deplace_droite(gamestate* state, int grille[20][10]);
 void deplace_gauche(gamestate* state, int grille[20][10]);
 void tourne_direct(gamestate* p_state, int grille[20][10]);
 void tourne_indirect(gamestate* p_state, int grille[20][10]);
+void nouveau_tetromino(gamestate* p_state);
 
 #endif

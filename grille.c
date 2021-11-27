@@ -18,7 +18,7 @@ void init_ncurses(){
 	init_pair(8,COLOR_WHITE,COLOR_BLACK);	// Couleur des contours (équivaut à pas de couleur du tout...)
 }
 
-/* Vérifie qu'une case est disponible */
+/* Vérifie qu'une case fait partie de la grille et est disponible (qu'elle contient la valeur 0) */
 bool case_disponible(int grille[20][10], int i, int j){
 	if(i<0 || i>=20 || j>=10 || j < 0) return false;
 	else if (grille[i][j] == 0) return true;

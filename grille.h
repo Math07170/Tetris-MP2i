@@ -1,5 +1,6 @@
 #ifndef GRILLE_H
 #define GRILLE_H
+
 #include <stdbool.h>
 
 void init_ncurses();

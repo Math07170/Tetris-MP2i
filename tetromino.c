@@ -5,6 +5,7 @@
 #include "grille.h"
 #include "utils.h"
 #include <ncurses.h>
+#include <stdlib.h>
 
 tetromino tab[7];
 
@@ -251,8 +252,6 @@ void init_tetrominos(){
     tab[6] = I;
 }
 	
-
-
 /* Efface une case de la grille */
 void efface(int grille[20][10], int i, int j){
 	grille[i][j] = 0;
@@ -271,8 +270,8 @@ void efface_tetromino(int grille[20][10], gamestate* p_state){
 }
 
 /* Dessine sur une case de la grille */ 
-void dessine(int grille[20][10], int i, int j, int block){
-	grille[i][j] = block;
+void dessine(int grille[20][10], int i, int j, int bloc){
+	grille[i][j] = bloc;
 }
 
 /* Affiche le tetromino en cours de descente */
@@ -286,7 +285,7 @@ void dessine_tetromino(int grille[20][10], gamestate* p_state){
 	}
 }
 
-/* Teste la validité d'une position */
+/* Teste la validité de la position du tetromino */
 bool mouvement_valide(int grille[20][10], gamestate state){
 	for(int i = 3; i >= 0; i--){
 		for(int j = 3; j >= 0; j--){
@@ -303,20 +302,19 @@ bool mouvement_valide(int grille[20][10], gamestate state){
 	return true;
 }
 
-/* Fait descendre le tetromino */
-void descend(gamestate* p_state, int grille[20][10]){
+/* Fait descendre le tetromino, renvoie 1 tant que c'est possible et 0 sinon */
+bool descend(gamestate* p_state, int grille[20][10]){
 	gamestate temp = *p_state;
 	temp.y++;
 	efface_tetromino(grille, p_state);
 	if(mouvement_valide(grille, temp)){
 		*p_state = temp;
+		dessine_tetromino(grille, p_state);
+		return true;
 	}
 	else{
-		/* TODO : Arrêt du block spawn d'un nouveau */
+		return false;
 	}
-	dessine_tetromino(grille, p_state);	
-
-	
 }
 
 /* Déplace le tetromino vers la droite (touche q) */
@@ -363,3 +361,10 @@ void tourne_indirect(gamestate* p_state, int grille[20][10]){
 	dessine_tetromino(grille, p_state);
 }
 
+/* Modifie l'état du jeu pour faire apparaître un tetromino aléatoire en haut de la grille de jeu */
+void nouveau_tetromino(gamestate* p_state){
+	p_state -> block = (rand() % 7) + 1;
+	p_state -> rotation_index = 0;
+	p_state -> x = tab[p_state -> block-1].spawn_x;
+	p_state -> y = tab[p_state -> block-1].spawn_y;
+}
