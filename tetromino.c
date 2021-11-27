@@ -5,101 +5,113 @@
 #include "grille.h"
 #include "utils.h"
 #include <ncurses.h>
+
 tetromino tab[7];
 
 /* Initialise le tableau tab */ 
 void init_tetrominos(){
-
-    tetromino T = {
-        3,
-        0,
-        3,
-        {
-            {
-                {0,0,0,0},
-                {6,6,6,0},
-                {0,6,0,0},
-                {0,0,0,0}
-            },
-            {
-                {0,6,0,0},
-                {6,6,0,0},
-                {0,6,0,0},
-                {0,0,0,0}
-            },
-            {
-                {0,0,0,0},
-                {0,6,0,0},
-                {6,6,6,0},
-                {0,0,0,0}
-            },
-            {
-                {0,6,0,0},
-                {0,6,6,0},
-                {0,6,0,0},
-                {0,0,0,0}
-            }
-
-        },
-        6
-    };
-    tab[5] = T;
-    
-    tetromino I = {
-        3,
-        0,
-        1,
-        {
-            {
-                {0,0,0,0},
-                {7,7,7,7},
-                {0,0,0,0},
-                {0,0,0,0}
-            },
-            {
-                {0,0,7,0},
-                {0,0,7,0},
-                {0,0,7,0},
-                {0,0,7,0}
-            },
-        },
-        7
-    };
-    tab[6] = I;
-    
-    tetromino J = {
+	
+	tetromino O = {
 		3,
 		0,
-		3,
+		0,
 		{
 			{
 				{0,0,0,0},
-				{5,5,5,0},
-				{0,0,5,0},
+				{0,1,1,0},
+				{0,1,1,0},
 				{0,0,0,0}
 			},
 			{
-				{0,5,0,0},
-				{0,5,0,0},
-				{5,5,0,0},
-				{0,0,0,0}
-			},
+                {0,0,0,0},		// Placeholder, sert à tester les rotations
+                {0,0,0,0},
+                {0,0,0,0},
+                {0,0,0,0}
+            },
 			{
-				{5,0,0,0},
-				{5,5,5,0},
-				{0,0,0,0},
-				{0,0,0,0}
-			},
-			{
-				{0,5,5,0},
-				{0,5,0,0},
-				{0,5,0,0},
-				{0,0,0,0}
-			}
+                {0,0,0,0},		// Placeholder, sert à tester les rotations
+                {0,0,0,0},
+                {0,0,0,0},
+                {0,0,0,0}
+            },
+            {
+                {0,0,0,0},		// Placeholder, sert à tester les rotations
+                {0,0,0,0},
+                {0,0,0,0},
+                {0,0,0,0}
+            },
 		},
-		5
+		1
 	};
-	tab[4] = J;
+	tab[0] = O;
+
+	tetromino Z = {
+		3,
+		0,
+		1,
+		{
+			{
+				{0,0,0,0},
+				{2,2,0,0},
+				{0,2,2,0},
+				{0,0,0,0}
+			},
+			{
+				{0,2,0,0},
+				{2,2,0,0},
+				{2,0,0,0},
+				{0,0,0,0}
+			},
+			{
+                {0,0,0,0},		// Placeholder, sert à tester les rotations
+                {0,0,0,0},
+                {0,0,0,0},
+                {0,0,0,0}
+            },
+            {
+                {0,0,0,0},		// Placeholder, sert à tester les rotations
+                {0,0,0,0},
+                {0,0,0,0},
+                {0,0,0,0}
+            },
+		},
+		2
+	};
+	tab[1] = Z;
+	
+	tetromino S = {
+		3,
+		0,
+		1,
+		{
+			{
+				{0,0,0,0},
+				{0,3,3,0},
+				{3,3,0,0},
+				{0,0,0,0}
+			},
+			{
+				{3,0,0,0},
+				{3,3,0,0},
+				{0,3,0,0},
+				{0,0,0,0}
+			},
+			{
+                {0,0,0,0},		// Placeholder, sert à tester les rotations
+                {0,0,0,0},
+                {0,0,0,0},
+                {0,0,0,0}
+            },
+            {
+                {0,0,0,0},		// Placeholder, sert à tester les rotations
+                {0,0,0,0},
+                {0,0,0,0},
+                {0,0,0,0}
+            },
+		},
+		3
+	};
+	tab[2] = S;
 	
 	tetromino L = {
 		3,
@@ -135,66 +147,111 @@ void init_tetrominos(){
 	};
 	tab[3] = L;
 	
-	tetromino S = {
+	tetromino J = {
 		3,
 		0,
-		1,
+		3,
 		{
 			{
 				{0,0,0,0},
-				{0,3,3,0},
-				{3,3,0,0},
+				{5,5,5,0},
+				{0,0,5,0},
 				{0,0,0,0}
 			},
 			{
-				{3,0,0,0},
-				{3,3,0,0},
-				{0,3,0,0},
+				{0,5,0,0},
+				{0,5,0,0},
+				{5,5,0,0},
 				{0,0,0,0}
 			},
-		},
-		3
-	};
-	tab[2] = S;
-	
-	tetromino Z = {
-		3,
-		0,
-		1,
-		{
 			{
+				{5,0,0,0},
+				{5,5,5,0},
 				{0,0,0,0},
-				{2,2,0,0},
-				{0,2,2,0},
 				{0,0,0,0}
 			},
 			{
-				{0,2,0,0},
-				{2,2,0,0},
-				{2,0,0,0},
+				{0,5,5,0},
+				{0,5,0,0},
+				{0,5,0,0},
 				{0,0,0,0}
-			},
+			}
 		},
-		2
+		5
 	};
-	tab[1] = Z;
-	
-	tetromino O = {
-		3,
-		0,
-		0,
-		{
-			{
-				{0,0,0,0},
-				{0,1,1,0},
-				{0,1,1,0},
-				{0,0,0,0}
-			},
-		},
-		1
-	};
-	tab[0] = O;
+	tab[4] = J;
+
+    tetromino T = {
+        3,
+        0,
+        3,
+        {
+            {
+                {0,0,0,0},
+                {6,6,6,0},
+                {0,6,0,0},
+                {0,0,0,0}
+            },
+            {
+                {0,6,0,0},
+                {6,6,0,0},
+                {0,6,0,0},
+                {0,0,0,0}
+            },
+            {
+                {0,6,0,0},
+                {6,6,6,0},
+                {0,0,0,0},
+                {0,0,0,0}
+            },
+            {
+                {0,6,0,0},
+                {0,6,6,0},
+                {0,6,0,0},
+                {0,0,0,0}
+            }
+
+        },
+        6
+    };
+    tab[5] = T;
+    
+    tetromino I = {
+        3,
+        0,
+        1,
+        {
+            {
+                {0,0,0,0},
+                {7,7,7,7},
+                {0,0,0,0},
+                {0,0,0,0}
+            },
+            {
+                {0,7,0,0},
+                {0,7,0,0},
+                {0,7,0,0},
+                {0,7,0,0}
+            },
+            {
+                {0,0,0,0},		// Placeholder, sert à tester les rotations
+                {0,0,0,0},
+                {0,0,0,0},
+                {0,0,0,0}
+            },
+            {
+                {0,0,0,0},		// Placeholder, sert à tester les rotations
+                {0,0,0,0},
+                {0,0,0,0},
+                {0,0,0,0}
+            },
+        },
+        7
+    };
+    tab[6] = I;
 }
+	
+
 
 /* Efface une case de la grille */
 void efface(int grille[20][10], int i, int j){
@@ -262,7 +319,7 @@ void descend(gamestate* p_state, int grille[20][10]){
 	
 }
 
-/* Déplace le tetromino vers la droite */
+/* Déplace le tetromino vers la droite (touche q) */
 void deplace_droite(gamestate* p_state, int grille[20][10]){
 	gamestate temp = *p_state;
 	temp.x++;
@@ -273,7 +330,7 @@ void deplace_droite(gamestate* p_state, int grille[20][10]){
 	dessine_tetromino(grille, p_state);
 }
 
-/* Déplace le tetromino vers la gauche */
+/* Déplace le tetromino vers la gauche (touche d) */
 void deplace_gauche(gamestate* p_state, int grille[20][10]){
 	gamestate temp = *p_state;
 	temp.x--;
@@ -284,10 +341,10 @@ void deplace_gauche(gamestate* p_state, int grille[20][10]){
 	dessine_tetromino(grille, p_state);
 }
 
-/* Tourne le tetromino dans le sens direct */
+/* Tourne le tetromino dans le sens direct (touche l) */
 void tourne_direct(gamestate* p_state, int grille[20][10]){
 	gamestate temp = *p_state;
-	temp.rotation_index = (temp.rotation_index - 1)%(tab[temp.block].rotation_max + 1);
+	temp.rotation_index = (temp.rotation_index + 3)%(tab[temp.block - 1].rotation_max + 1);
 		efface_tetromino(grille, p_state);
 	if(mouvement_valide(grille, temp)){
 		*p_state = temp;		
@@ -295,10 +352,10 @@ void tourne_direct(gamestate* p_state, int grille[20][10]){
 	dessine_tetromino(grille, p_state);
 }
 
-/* Tourne le tetromino dans le sens indirect */
+/* Tourne le tetromino dans le sens indirect (touche p) */
 void tourne_indirect(gamestate* p_state, int grille[20][10]){
 	gamestate temp = *p_state;
-	temp.rotation_index = (temp.rotation_index + 1)%(tab[temp.block].rotation_max + 1);
+	temp.rotation_index = (temp.rotation_index + 1)%(tab[temp.block - 1].rotation_max + 1);
 		efface_tetromino(grille, p_state);
 	if(mouvement_valide(grille, temp)){
 		*p_state = temp;		

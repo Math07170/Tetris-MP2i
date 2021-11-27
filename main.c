@@ -35,7 +35,7 @@ void tick(){
 
 int main() {
 	init_tetrominos();
-	state.block = 2;
+	state.block = 1;
 	state.x = tab[state.block-1].spawn_x;
 	state.y = tab[state.block-1].spawn_y;
     init_ncurses();
@@ -50,12 +50,8 @@ int main() {
 	grille[19][7] = 6;
 	grille[19][6] = 6;
 	grille[18][7] = 6;
-	
-	grille[19][0] = 9; // Test avec une couleur invalide
-	
-	grille[0][0] = 1;	// Test avec divers blocs un peu partout
-	grille[0][9] = 2;
-	grille[19][0] = 3;
+
+	grille[19][0] = 3;	// Test avec divers blocs un peu partout
 	grille[5][7] = 4;
 	grille[13][4] = 5;
 	grille[13][5] = 5;
