@@ -3,8 +3,6 @@
 
 #include <time.h>
 
-void wait(double time);
-
 typedef struct {
     int block;
     int rotation_index;
@@ -12,5 +10,7 @@ typedef struct {
     int y;
     float game_speed;
 } gamestate;
+
+void wait(double time);
 
 #endif

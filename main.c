@@ -17,28 +17,35 @@ gamestate state = {
 	1.0
 };
 
-int play = 0;
-int tick_count = 0;
+/* Agit sur le tetromino en cours de chute, selon l'entrée clavier */		// À déplacer...
+void interroge_commandes(gamestate* p_state, int grille[20][10]){
+	char cmd = getch();
+	if(cmd == 'd') deplace_droite(p_state, grille);
+	else if (cmd == 'q') deplace_gauche(p_state, grille);
+	else if (cmd == 'l') tourne_direct(p_state, grille);
+	else if (cmd == 'p') tourne_indirect(p_state, grille);
+	return;
+}
+
+int play = 0;		// Servira plus tard pour la mise en pause
 
 void tick(){
-	nettoie_grille(grille);			// Ne fonctionne pas...
 	nouveau_tetromino(&state);
-	bool descente_possible = true;
+	unsigned long int tick_count = 0;
     while(play == 0){
-		char a = getch();
-		if(a == 'd') deplace_droite(&state, grille);
-		else if (a == 'q') deplace_gauche(&state, grille);
-		else if (a == 'l') tourne_direct(&state, grille);
-		else if (a == 'p') tourne_indirect(&state, grille);
+		interroge_commandes(&state,grille);
 		affiche_grille(grille);
-		if(descente_possible == true){
-			descente_possible = descend(&state, grille);
-		}else{
-			fixe_tetromino(state, grille);
-			nouveau_tetromino(&state);
-			descente_possible = true;
+		if(tick_count%2 == 0){		// Les tetrominos descendent 1 tick sur 2 -> possibilité de déplacer un tetromino avant qu'il ne se "fixe"
+			if(descente_possible(&state,grille) == true){
+				descend(&state, grille);
+			}else{
+				fixe_tetromino(state, grille);
+				nettoie_lignes(grille);
+				nouveau_tetromino(&state);
+			}
 		}
 		usleep(166666);
+		tick_count++;
 	}
 }
 
@@ -46,21 +53,10 @@ int main() {
 	init_tetrominos();
     init_ncurses();
     initialise_grille(grille);
-
-	//grille[16][9] = 7;
-	//grille[17][9] = 7;
-	//grille[18][9] = 7;
-	//grille[19][9] = 7;
-	//grille[19][8] = 6;
-	//grille[19][7] = 6;
-	//grille[19][6] = 6;
-	//grille[18][7] = 6;
-	//grille[19][0] = 3;
-	//grille[5][7] = 4;
-	//grille[13][4] = 5;
-	//grille[13][5] = 5;
-	
+    srand(time(0));		// "Initialise l'aléatoire" de façon à avoir une suite de tetrominos différente à chaque exécution
+    
 	tick();
+	
 	endwin();
 	return 0;
 }

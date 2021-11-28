@@ -47,12 +47,12 @@ void affiche_grille(int grille[20][10]){
 	}
 	for(int i = 0; i < 20; i++){ // Affichage des blocs, en couleur
 		for(int j = 0; j < 10; j ++){
-			int tmp = grille[i][j];
-			if((tmp <= 7) && (tmp >= 1)){	// Elimine les valeurs invalides et l'absence de bloc
-				attron(COLOR_PAIR(tmp));
+			int couleur = grille[i][j];
+			if((couleur <= 7) && (couleur >= 1)){	// N'affiche pas les valeurs invalides et l'absence de bloc
+				attron(COLOR_PAIR(couleur));
 				mvaddch(2+i,3+(2*j),' ');
 				mvaddch(2+i,4+(2*j),' ');
-				attroff(COLOR_PAIR(tmp));
+				attroff(COLOR_PAIR(couleur));
 				
 			}
 		}

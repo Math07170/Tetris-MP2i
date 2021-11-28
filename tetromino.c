@@ -302,19 +302,28 @@ bool mouvement_valide(int grille[20][10], gamestate state){
 	return true;
 }
 
-/* Fait descendre le tetromino, renvoie 1 tant que c'est possible et 0 sinon */
-bool descend(gamestate* p_state, int grille[20][10]){
+/* Renvoie true si le tetromino peut descendre */
+bool descente_possible(gamestate* p_state, int grille[20][10]){
+	gamestate temp = *p_state;
+	temp.y++;
+	efface_tetromino(grille, p_state);
+	if(mouvement_valide(grille, temp)){
+		return true;
+	}else{
+		return false;
+	}
+}
+
+/* Fait descendre le tetromino, si c'est possible */
+void descend(gamestate* p_state, int grille[20][10]){
 	gamestate temp = *p_state;
 	temp.y++;
 	efface_tetromino(grille, p_state);
 	if(mouvement_valide(grille, temp)){
 		*p_state = temp;
 		dessine_tetromino(grille, p_state);
-		return true;
 	}
-	else{
-		return false;
-	}
+	return;
 }
 
 /* Déplace le tetromino vers la droite (touche q) */
@@ -361,7 +370,7 @@ void tourne_indirect(gamestate* p_state, int grille[20][10]){
 	dessine_tetromino(grille, p_state);
 }
 
-/* Modifie l'état du jeu pour faire apparaître un tetromino aléatoire en haut de la grille de jeu */			// L'ordre aléatoire est à améliorer
+/* Modifie l'état du jeu pour faire apparaître un tetromino aléatoire en haut de la grille de jeu */
 void nouveau_tetromino(gamestate* p_state){
 	p_state -> block = (rand() % 7) + 1;
 	p_state -> rotation_index = 0;
@@ -369,7 +378,7 @@ void nouveau_tetromino(gamestate* p_state){
 	p_state -> y = tab[p_state -> block-1].spawn_y;
 }
 
-/* Copie le tetromino du gamestate dans la grille de jeu */			// Problème de clignotement à régler
+/* Copie le tetromino du gamestate dans la grille de jeu */
 void fixe_tetromino(gamestate state, int grille[20][10]){
 	for(int i = 0; i <= 3; i++){
 		for(int j = 0; j <= 3; j++){
@@ -381,24 +390,21 @@ void fixe_tetromino(gamestate state, int grille[20][10]){
 	return;
 }
 
-/* Vérifie toutes les lignes de la grille et supprime  celles qui sont pleines */			// Ne fonctionne pas
-void nettoie_grille(int grille[20][10]){
+/* Vérifie toutes les lignes de la grille et supprime  celles qui sont pleines */
+void nettoie_lignes(int grille[20][10]){
 	bool ligne_pleine;
-	int i;
-	int j = 0;
-	for(i = 0; i < 20; i++){			// Pour toutes les lignes de la grille, de haut en bas...
+	for(int i = 0; i < 20; i++){			// Pour toutes les lignes de la grille, de haut en bas...
 		ligne_pleine = true;
-		while(ligne_pleine == true && j < 10){			// ...vérifie si la ligne est pleine...
+		for(int j = 0; j < 10; j++){			// ...vérifie si la ligne est pleine...
 			if(grille[i][j] == 0){
 				ligne_pleine = false;
 			}
-			j++;
 		}
-		if(ligne_pleine = true){			// ...et si oui, la supprime en faisant descendre d'une ligne les lignes supérieures 
-			for(int k = 1; k <= i; k++){
+		if(ligne_pleine == true){			// ...et si oui, la supprime en faisant descendre d'une ligne les lignes supérieures
+			for(int k = i; k > 0; k--){
 				for(int l = 0; l < 10; l++){
 					grille[k][l] = grille[k - 1][l];
-				}	
+				}
 			}
 		}
 	}
