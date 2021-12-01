@@ -7,6 +7,7 @@ void init_ncurses(){
 	noecho();
 	nodelay(stdscr, TRUE);
 	cbreak();
+	curs_set(0);
 	start_color();
 	init_pair(1,COLOR_WHITE,COLOR_WHITE);	// Couleur des blocs O
 	init_pair(2,COLOR_WHITE,COLOR_RED);		// Couleur des blocs Z
@@ -27,37 +28,40 @@ bool case_disponible(int grille[20][10], int i, int j){
 	} 
 }
 
-/* Affiche la grille de jeu, à deux colonnes du bord gauche et une ligne du bord supérieur du terminal
- * Ne contient pas encore l'emplacement pour le bloc suivant, la réserve, etc. */
+/* Affiche la grille de jeu, à deux colonnes du bord gauche et une ligne du bord supérieur du terminal */
 void affiche_grille(int grille[20][10]){
 	erase();
-	for(int i = 2; i < 22; i++){	//	Lignes verticales
-		mvaddch(i,2,ACS_VLINE);
-		mvaddch(i,23,ACS_VLINE);
-	}
-	for(int i = 3; i < 23; i++){	// Lignes horizontales
-		mvaddch(1,i,ACS_HLINE);
-		mvaddch(22,i,ACS_HLINE);
-	}
-	{	// Angles
-		mvaddch(1,2,ACS_ULCORNER);
-		mvaddch(22,2,ACS_LLCORNER);
-		mvaddch(22,23,ACS_LRCORNER);
-		mvaddch(1,23,ACS_URCORNER);
-	}
-	for(int i = 0; i < 20; i++){ // Affichage des blocs, en couleur
-		for(int j = 0; j < 10; j ++){
-			int couleur = grille[i][j];
-			if((couleur <= 7) && (couleur >= 1)){	// N'affiche pas les valeurs invalides et l'absence de bloc
-				attron(COLOR_PAIR(couleur));
-				mvaddch(2+i,3+(2*j),' ');
-				mvaddch(2+i,4+(2*j),' ');
-				attroff(COLOR_PAIR(couleur));
-				
+	
+	{		// Affiche la grille de jeu principale et les blocs qu'elle contient
+		for(int i = 2; i < 22; i++){
+			mvaddch(i,2,ACS_VLINE);
+			mvaddch(i,23,ACS_VLINE);
+		}
+		for(int i = 3; i < 23; i++){
+			mvaddch(1,i,ACS_HLINE);
+			mvaddch(22,i,ACS_HLINE);
+		}
+		{
+			mvaddch(1,2,ACS_ULCORNER);
+			mvaddch(22,2,ACS_LLCORNER);
+			mvaddch(22,23,ACS_LRCORNER);
+			mvaddch(1,23,ACS_URCORNER);
+		}
+		for(int i = 0; i < 20; i++){
+			for(int j = 0; j < 10; j ++){
+				int couleur = grille[i][j];
+				if((couleur <= 7) && (couleur >= 1)){
+					attron(COLOR_PAIR(couleur));
+					mvaddch(2+i,3+(2*j),' ');
+					mvaddch(2+i,4+(2*j),' ');
+					attroff(COLOR_PAIR(couleur));
+				}
 			}
 		}
-	} 
-	move(0,50);	// Sort le curseur de la grille (à optimiser...)
+	}
+	
+	// Ici : Blocs suivants et réserve à afficher
+	
 	refresh();
 	return;
 }

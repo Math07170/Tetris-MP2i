@@ -32,19 +32,22 @@ int play = 0;		// Servira plus tard pour la mise en pause
 void tick(){
 	nouveau_tetromino(&state);
 	unsigned long int tick_count = 0;
+	int delai_descentes = 4;
+	bool avance_rapide = false;
+	int lignes_supprimees = 0;
     while(play == 0){
 		interroge_commandes(&state,grille);
 		affiche_grille(grille);
-		if(tick_count%2 == 0){		// Les tetrominos descendent 1 tick sur 2 -> possibilité de déplacer un tetromino avant qu'il ne se "fixe"
+		if(tick_count % delai_descentes == 0){
 			if(descente_possible(&state,grille) == true){
 				descend(&state, grille);
 			}else{
 				fixe_tetromino(state, grille);
-				nettoie_lignes(grille);
+				lignes_supprimees += nettoie_lignes(grille);
 				nouveau_tetromino(&state);
 			}
 		}
-		usleep(166666);
+		usleep(25000);		// 40 Ticks par seconde (Totalement foireux et toujours imprécis)
 		tick_count++;
 	}
 }

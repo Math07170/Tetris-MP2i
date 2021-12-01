@@ -390,9 +390,10 @@ void fixe_tetromino(gamestate state, int grille[20][10]){
 	return;
 }
 
-/* Vérifie toutes les lignes de la grille et supprime  celles qui sont pleines */
-void nettoie_lignes(int grille[20][10]){
+/* Vérifie toutes les lignes de la grille, supprime celles qui sont pleines et renvoie le nombre de lignes supprimées */
+int nettoie_lignes(int grille[20][10]){
 	bool ligne_pleine;
+	int lignes_supprimees = 0;
 	for(int i = 0; i < 20; i++){			// Pour toutes les lignes de la grille, de haut en bas...
 		ligne_pleine = true;
 		for(int j = 0; j < 10; j++){			// ...vérifie si la ligne est pleine...
@@ -401,6 +402,7 @@ void nettoie_lignes(int grille[20][10]){
 			}
 		}
 		if(ligne_pleine == true){			// ...et si oui, la supprime en faisant descendre d'une ligne les lignes supérieures
+			lignes_supprimees++;
 			for(int k = i; k > 0; k--){
 				for(int l = 0; l < 10; l++){
 					grille[k][l] = grille[k - 1][l];
@@ -408,5 +410,5 @@ void nettoie_lignes(int grille[20][10]){
 			}
 		}
 	}
-	return;
+	return lignes_supprimees;
 }
