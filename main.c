@@ -22,8 +22,8 @@ void interroge_commandes(gamestate* p_state, int grille[20][10]){
 	char cmd = getch();
 	if(cmd == 'd') deplace_droite(p_state, grille);
 	else if (cmd == 'q') deplace_gauche(p_state, grille);
-	else if (cmd == 'l') tourne_direct(p_state, grille);
-	else if (cmd == 'p') tourne_indirect(p_state, grille);
+	else if (cmd == 'e') tourne_direct(p_state, grille);
+	else if (cmd == 'a') tourne_indirect(p_state, grille);
 	return;
 }
 
@@ -31,14 +31,15 @@ int play = 0;		// Servira plus tard pour la mise en pause
 
 void tick(){
 	nouveau_tetromino(&state);
-	unsigned long int tick_count = 0;
-	int delai_descentes = 4;
+	int tick_count = 0;
+	int delai_descentes = 40;
 	bool avance_rapide = false;
 	int lignes_supprimees = 0;
     while(play == 0){
 		interroge_commandes(&state,grille);
 		affiche_grille(grille);
-		if(tick_count % delai_descentes == 0){
+		if(tick_count == delai_descentes){
+			tick_count = 0;
 			if(descente_possible(&state,grille) == true){
 				descend(&state, grille);
 			}else{
