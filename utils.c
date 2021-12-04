@@ -4,10 +4,10 @@
 
 /* Permet d'attendre un temps donné */
 void wait(double towait){
-    clock_t end = time(NULL) + towait;
-    clock_t current = time(NULL);
+    time_t end = time(NULL) + towait;
+    time_t current = time(NULL);
     while(difftime(end,current) >= 0.0){
-        sleep( difftime(end, current) * (99.0 / 100.0) );
+        usleep( (difftime(end, current) * (5.0 / 100.0))/(1000000) );
         current = time(NULL);
 	}
 }

@@ -30,9 +30,9 @@ void interroge_commandes(gamestate* p_state, int grille[20][10]){
 int play = 0;		// Servira plus tard pour la mise en pause
 
 void tick(){
-	nouveau_tetromino(&state);
+	nouveau_tetromino(&state, grille);
 	int tick_count = 0;
-	int delai_descentes = 40;
+	int delai_descentes = 2;
 	bool avance_rapide = false;
 	int lignes_supprimees = 0;
     while(play == 0){
@@ -45,10 +45,10 @@ void tick(){
 			}else{
 				fixe_tetromino(state, grille);
 				lignes_supprimees += nettoie_lignes(grille);
-				nouveau_tetromino(&state);
+				nouveau_tetromino(&state, grille);
 			}
 		}
-		usleep(25000);		// 40 Ticks par seconde (Totalement foireux et toujours imprécis)
+		wait(1/400);		// 40 Ticks par seconde
 		tick_count++;
 	}
 }

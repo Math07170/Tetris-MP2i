@@ -371,11 +371,20 @@ void tourne_indirect(gamestate* p_state, int grille[20][10]){
 }
 
 /* Modifie l'état du jeu pour faire apparaître un tetromino aléatoire en haut de la grille de jeu */
-void nouveau_tetromino(gamestate* p_state){
-	p_state -> block = (rand() % 7) + 1;
-	p_state -> rotation_index = 0;
-	p_state -> x = tab[p_state -> block-1].spawn_x;
-	p_state -> y = tab[p_state -> block-1].spawn_y;
+void nouveau_tetromino(gamestate* p_state, int grille[20][10]){
+	gamestate temp = *p_state;
+
+	temp.block = (rand() % 7) + 1;
+	temp.rotation_index = 0;
+	temp.x = tab[temp.block-1].spawn_x;
+	temp.y = tab[temp.block-1].spawn_y;
+
+	if(mouvement_valide(grille, temp)){
+		*p_state = temp;
+
+	}else{
+		/* TODO : ENDGAME */
+	}
 }
 
 /* Copie le tetromino du gamestate dans la grille de jeu */
