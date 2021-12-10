@@ -22,17 +22,17 @@ void interroge_commandes(gamestate* p_state, int grille[20][10]){
 	char cmd = getch();
 	if(cmd == 'd') deplace_droite(p_state, grille);
 	else if (cmd == 'q') deplace_gauche(p_state, grille);
-	else if (cmd == 'e') tourne_direct(p_state, grille);
-	else if (cmd == 'a') tourne_indirect(p_state, grille);
+	else if (cmd == 'l') tourne_direct(p_state, grille);
+	else if (cmd == 'p') tourne_indirect(p_state, grille);
 	return;
 }
 
-int play = 0;		// Servira plus tard pour la mise en pause
+int play = 0;		// 0 : Jeu en cours ; 1 Pause ; 2 Perdu
 
 void tick(){
-	nouveau_tetromino(&state, grille);
+	play = nouveau_tetromino(&state, grille);
 	int tick_count = 0;
-	int delai_descentes = 20;
+	int delai_descentes = 7;
 	bool avance_rapide = false;
 	int lignes_supprimees = 0;
     while(play == 0){
@@ -45,7 +45,7 @@ void tick(){
 			}else{
 				fixe_tetromino(state, grille);
 				lignes_supprimees += nettoie_lignes(grille);
-				nouveau_tetromino(&state, grille);
+				play = nouveau_tetromino(&state, grille);
 			}
 		}
 		usleep(25000);	// 40 Ticks par seconde

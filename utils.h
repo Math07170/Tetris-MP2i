@@ -8,7 +8,7 @@ typedef struct {
     int rotation_index;
     int x;
     int y;
-    float game_speed;
+    float game_speed; // à virer
 } gamestate;
 
 void wait(double time);

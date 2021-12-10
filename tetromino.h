@@ -21,7 +21,7 @@ void deplace_droite(gamestate* state, int grille[20][10]);
 void deplace_gauche(gamestate* state, int grille[20][10]);
 void tourne_direct(gamestate* p_state, int grille[20][10]);
 void tourne_indirect(gamestate* p_state, int grille[20][10]);
-void nouveau_tetromino(gamestate* p_state, int grille[20][10]);
+int nouveau_tetromino(gamestate* p_state, int grille[20][10]);
 void fixe_tetromino(gamestate state, int grille[20][10]);
 int nettoie_lignes(int grille[20][10]);
 

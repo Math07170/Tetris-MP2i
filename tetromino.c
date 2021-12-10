@@ -370,8 +370,9 @@ void tourne_indirect(gamestate* p_state, int grille[20][10]){
 	dessine_tetromino(grille, p_state);
 }
 
-/* Modifie l'état du jeu pour faire apparaître un tetromino aléatoire en haut de la grille de jeu */
-void nouveau_tetromino(gamestate* p_state, int grille[20][10]){
+/* Modifie l'état du jeu pour faire apparaître un tetromino aléatoire en haut de la grille de jeu
+ * Renvoie 0 si le tetromino a pu apparaître et 2 sinon (partie perdue) */
+int nouveau_tetromino(gamestate* p_state, int grille[20][10]){
 	gamestate temp = *p_state;
 
 	temp.block = (rand() % 7) + 1;
@@ -381,9 +382,9 @@ void nouveau_tetromino(gamestate* p_state, int grille[20][10]){
 
 	if(mouvement_valide(grille, temp)){
 		*p_state = temp;
-
+		return 0;
 	}else{
-		/* TODO : ENDGAME */
+		return 2;
 	}
 }
 
