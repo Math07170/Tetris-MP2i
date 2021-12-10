@@ -32,7 +32,7 @@ int play = 0;		// Servira plus tard pour la mise en pause
 void tick(){
 	nouveau_tetromino(&state, grille);
 	int tick_count = 0;
-	int delai_descentes = 2;
+	int delai_descentes = 20;
 	bool avance_rapide = false;
 	int lignes_supprimees = 0;
     while(play == 0){
@@ -48,7 +48,7 @@ void tick(){
 				nouveau_tetromino(&state, grille);
 			}
 		}
-		wait(1/400);		// 40 Ticks par seconde
+		usleep(25000);	// 40 Ticks par seconde
 		tick_count++;
 	}
 }
