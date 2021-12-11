@@ -1,6 +1,11 @@
 #include <ncurses.h>
 #include <stdbool.h>
 
+int reserve[4][4] = {{1,1,1,1},{1,1,1,1},{1,1,1,1},{1,1,1,1}};		// TEST, pas nécessaire après la réforme du gamestate
+int suivants[4][4][4] = {{{2,2,2,2},{2,2,2,2},{2,2,2,2},{2,2,2,2}},{{1,1,1,1},{1,1,1,1},{1,1,1,1},{1,1,1,1}},{{2,2,2,2},{2,2,2,2},{2,2,2,2},{2,2,2,2}},{{1,1,1,1},{1,1,1,1},{1,1,1,1},{1,1,1,1}}};		// Idem
+int score = 123456;		// Idem
+int lignes = 120;		// Idem
+
 /* Initialise ncurses */
 void init_ncurses(){
 	initscr();
@@ -45,11 +50,26 @@ void cadre(int xmin, int xmax, int ymin, int ymax){
 	return;
 }
 
+/* "Remplit" un espace de 4x4 blocs, repéré par les coordonnées de son angle supérieur gauche, avec les blocs d'un tableau source */
+void remplit_cadre(int xmin, int ymin, int source[4][4]){
+	for(int i = 0; i < 4; i++){
+		for(int j = 0; j < 4; j ++){
+			int couleur = source[i][j];
+			if((couleur <= 7) && (couleur >= 1)){
+				attron(COLOR_PAIR(couleur));
+				mvaddch(xmin+1+i,ymin+1+(2*j),' ');
+				mvaddch(xmin+1+i,ymin+2+(2*j),' ');
+				attroff(COLOR_PAIR(couleur));
+			}
+		}
+	}
+}
+
 /* Affiche la grille de jeu, à deux colonnes du bord gauche et une ligne du bord supérieur du terminal */
 void affiche_grille(int grille[20][10]){
 	erase();
 	
-	{		// Affiche la grille de jeu principale, et les blocs qu'elle contient
+	{		// Grille de jeu principale
 		cadre(2,23,1,22);
 		for(int i = 0; i < 20; i++){
 			for(int j = 0; j < 10; j ++){
@@ -63,13 +83,18 @@ void affiche_grille(int grille[20][10]){
 			}
 		}
 	}
-	{		// Emplacement des blocs suivants, vide pour l'instant
+	{		// Emplacement des 4 blocs suivants
 		cadre(26,35,2,22);
 		mvprintw(1,27,"Suivants");
+		remplit_cadre(2,26,suivants[0]);
+		remplit_cadre(7,26,suivants[1]);
+		remplit_cadre(12,26,suivants[2]);
+		remplit_cadre(17,26,suivants[3]);
 	}
-	{		// Emplacement de la réserve, vide pour l'instant
+	{		// Emplacement de la réserve
 		cadre(38,47,2,7);
 		mvprintw(1,39,"Réserve");
+		remplit_cadre(2,38,reserve);
 	}
 	{		// Emplacement du score, vide pour l'instant
 		cadre(38,47,11,13);
@@ -84,7 +109,7 @@ void affiche_grille(int grille[20][10]){
 	return;
 }
 
-/* Vide la grille (la remplit de zéros) */
+/* Vide le tableau grille (la remplit de zéros) */
 void initialise_grille(int grille[20][10]){
 	for(int i = 0; i < 20; i++){
 		for(int j = 0; j < 10; j ++){
