@@ -28,25 +28,29 @@ bool case_disponible(int grille[20][10], int i, int j){
 	} 
 }
 
+/* Affiche un cadre vide sur le terminal, de xmin à xmax en abscisse et de ymin à ymax en ordonnée */
+void cadre(int xmin, int xmax, int ymin, int ymax){
+	for(int x = xmin + 1; x < xmax; x++){
+		mvaddch(ymin,x,ACS_HLINE);
+		mvaddch(ymax,x,ACS_HLINE);
+	}
+	for(int y = ymin + 1; y < ymax; y++){
+		mvaddch(y,xmin,ACS_VLINE);
+		mvaddch(y,xmax,ACS_VLINE);
+	}
+	mvaddch(ymin,xmin,ACS_ULCORNER);
+	mvaddch(ymin,xmax,ACS_URCORNER);
+	mvaddch(ymax,xmin,ACS_LLCORNER);
+	mvaddch(ymax,xmax,ACS_LRCORNER);
+	return;
+}
+
 /* Affiche la grille de jeu, à deux colonnes du bord gauche et une ligne du bord supérieur du terminal */
 void affiche_grille(int grille[20][10]){
 	erase();
 	
-	{		// Affiche la grille de jeu principale et les blocs qu'elle contient
-		for(int i = 2; i < 22; i++){
-			mvaddch(i,2,ACS_VLINE);
-			mvaddch(i,23,ACS_VLINE);
-		}
-		for(int i = 3; i < 23; i++){
-			mvaddch(1,i,ACS_HLINE);
-			mvaddch(22,i,ACS_HLINE);
-		}
-		{
-			mvaddch(1,2,ACS_ULCORNER);
-			mvaddch(22,2,ACS_LLCORNER);
-			mvaddch(22,23,ACS_LRCORNER);
-			mvaddch(1,23,ACS_URCORNER);
-		}
+	{		// Affiche la grille de jeu principale, et les blocs qu'elle contient
+		cadre(2,23,1,22);
 		for(int i = 0; i < 20; i++){
 			for(int j = 0; j < 10; j ++){
 				int couleur = grille[i][j];
@@ -59,8 +63,22 @@ void affiche_grille(int grille[20][10]){
 			}
 		}
 	}
-	
-	// Ici : Blocs suivants et réserve à afficher
+	{		// Emplacement des blocs suivants, vide pour l'instant
+		cadre(26,35,2,22);
+		mvprintw(1,27,"Suivants");
+	}
+	{		// Emplacement de la réserve, vide pour l'instant
+		cadre(38,47,2,7);
+		mvprintw(1,39,"Réserve");
+	}
+	{		// Emplacement du score, vide pour l'instant
+		cadre(38,47,11,13);
+		mvprintw(10,39,"Score");
+	}
+	{		// Emplacement du nombre de lignes, vide pour l'instant
+		cadre(38,47,17,19);
+		mvprintw(16,39,"Lignes");
+	}
 	
 	refresh();
 	return;
