@@ -6,6 +6,7 @@
 #include "grille.h"
 #include "utils.h"
 #include "tetromino.h"
+#include "menus.h"
 
 int grille[20][10];
 
@@ -68,6 +69,20 @@ int main() {
     init_ncurses();
     initialise_grille(grille);
     srand(time(0));		// "Initialise l'aléatoire" de façon à avoir une suite de tetrominos différente à chaque exécution
+    
+    {		// Test de l'écran titre, implémentation temporaire, à améliorer (TODO : affichage et modification des commandes)
+		int tick_count = 0;
+		int clr[6] = {(rand()%6) + 2,(rand()%6) + 2,(rand()%6) + 2,(rand()%6) + 2,(rand()%6) + 2,(rand()%6) + 2};
+		while(getch() != '\n'){
+			ecran_titre(clr);
+			usleep(25000);		// 40 TPS
+			if(tick_count == 20){
+				change_couleur_lettre_titre(clr);
+				tick_count = 0;
+			}
+			tick_count++;
+		}
+	}
     
 	tick();
 	
