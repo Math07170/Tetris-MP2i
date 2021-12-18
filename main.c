@@ -20,7 +20,10 @@ void init_gamestate(){
 	state.game_speed = 5;
 	state.reserve_utilisee = false;
 	state.reserve = 0;
-	//Définir suivant
+	state.suivants[0] = (rand() % 7);
+	state.suivants[1] = (rand() % 7);
+	state.suivants[2] = (rand() % 7);
+	state.suivants[3] = (rand() % 7);
 	state.statut = 0;
 	state.descente_rapide = false;
 	state.compte_ligne = 0;
@@ -38,8 +41,9 @@ void interroge_commandes(gamestate* p_state, int grille[20][10]){
 	return;
 }
 
-int play = 0;		// 0 : Jeu en cours ; 1 Pause ; 2 Perdu
+int play = 0;		// 0 : Jeu en cours ; 1 : Pause ; 2 : Perdu
 
+/* Contient le "jeu" de Tetris en lui-même */
 void tick(){
 	play = nouveau_tetromino(&state, grille);
 	int tick_count = 0;
@@ -47,7 +51,7 @@ void tick(){
 	int lignes_supprimees = 0;
     while(play == 0){
 		interroge_commandes(&state,grille);
-		affiche_grille(grille);
+		affiche_grille(grille,state);
 		if(tick_count == state.game_speed){
 			tick_count = 0;
 			if(descente_possible(&state,grille) == true){
@@ -64,25 +68,15 @@ void tick(){
 }
 
 int main() {
-	init_gamestate();
-	init_tetrominos();
+
     init_ncurses();
-    initialise_grille(grille);
     srand(time(0));		// "Initialise l'aléatoire" de façon à avoir une suite de tetrominos différente à chaque exécution
     
-    {		// Test de l'écran titre, implémentation temporaire, à améliorer (TODO : affichage et modification des commandes)
-		int tick_count = 0;
-		int clr[6] = {(rand()%6) + 2,(rand()%6) + 2,(rand()%6) + 2,(rand()%6) + 2,(rand()%6) + 2,(rand()%6) + 2};
-		while(getch() != '\n'){
-			ecran_titre(clr);
-			usleep(25000);		// 40 TPS
-			if(tick_count == 20){
-				change_couleur_lettre_titre(clr);
-				tick_count = 0;
-			}
-			tick_count++;
-		}
-	}
+	ecran_titre();		// TODO : affichage et modification des commandes
+    
+   	init_gamestate();
+	init_tetrominos();
+	initialise_grille(grille);
     
 	tick();
 	

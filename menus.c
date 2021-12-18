@@ -4,24 +4,6 @@
 #include <time.h>
 #include "grille.h"
 
-/* Initialise ncurses (copié dans grille.c)
-void init_ncurses(){
-	initscr();
-	noecho();
-	nodelay(stdscr, TRUE);
-	cbreak();
-	curs_set(0);
-	start_color();
-	init_pair(1,COLOR_WHITE,COLOR_WHITE);	// Couleur des blocs O
-	init_pair(2,COLOR_WHITE,COLOR_RED);		// Couleur des blocs Z
-	init_pair(3,COLOR_WHITE,COLOR_GREEN);	// Couleur des blocs S
-	init_pair(4,COLOR_WHITE,COLOR_YELLOW);	// Couleur des blocs L
-	init_pair(5,COLOR_WHITE,COLOR_BLUE);	// Couleur des blocs J
-	init_pair(6,COLOR_WHITE,COLOR_MAGENTA);	// Couleur des blocs T
-	init_pair(7,COLOR_WHITE,COLOR_CYAN);	// Couleur des blocs I
-	init_pair(8,COLOR_WHITE,COLOR_BLACK);	// Couleur des contours (équivaut à pas de couleur du tout...)
-} */
-
 /* Renvoie la colonne de la plus à gauche disponible pour écrire la indice-ième lettre de l'écran titre */
 int min_x(int indice){
 	return 2 + 16 * indice;
@@ -46,13 +28,13 @@ void remplit(int couleur,int xmin,int xmax,int ymin,int ymax){
 
 /* Choisit aléatoirement une lettre du titre et change sa couleur */
 void change_couleur_lettre_titre(int clr[6]){
-	int couleur_a_changer = rand()%6;
-	clr[couleur_a_changer] = (rand()%6)+2;
+	int couleur_a_changer = rand() % 6;
+	clr[couleur_a_changer] = (rand() % 6)+2;
 	return;
 }
 
-/* Affiche l'écran titre du jeu */
-void ecran_titre(int clr[6]){
+/* Affiche l'écran titre du jeu à un instant donné */
+void affiche_ecran_titre(int clr[6]){
 	
 	attron(A_BOLD);
 	mvprintw(2,33,"Mathias et Barnabé présentent...");
@@ -104,13 +86,12 @@ void ecran_titre(int clr[6]){
 	return;
 }
 
-/* int main(){
-	srand(time(0));
-	init_ncurses();
+/* Affiche l'écran titre du jeu tant que l'utilisateur n'appuie pas sur entrée */		// TODO : affichage et modification des commandes
+void ecran_titre(){
 	int tick_count = 0;
 	int clr[6] = {(rand()%6) + 2,(rand()%6) + 2,(rand()%6) + 2,(rand()%6) + 2,(rand()%6) + 2,(rand()%6) + 2};
 	while(getch() != '\n'){
-		ecran_titre(clr);
+		affiche_ecran_titre(clr);
 		usleep(25000);		// 40 TPS
 		if(tick_count == 20){
 			change_couleur_lettre_titre(clr);
@@ -118,6 +99,5 @@ void ecran_titre(int clr[6]){
 		}
 		tick_count++;
 	}
-	endwin();
-	return 0;
-} */
+	return;
+}

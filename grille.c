@@ -1,10 +1,9 @@
 #include <ncurses.h>
 #include <stdbool.h>
+#include "utils.h"
+#include "tetromino.h"
 
-int reserve[4][4] = {{1,1,1,1},{1,1,1,1},{1,1,1,1},{1,1,1,1}};		// TEST, pas nécessaire après la réforme du gamestate
-int suivants[4][4][4] = {{{2,2,2,2},{2,2,2,2},{2,2,2,2},{2,2,2,2}},{{1,1,1,1},{1,1,1,1},{1,1,1,1},{1,1,1,1}},{{2,2,2,2},{2,2,2,2},{2,2,2,2},{2,2,2,2}},{{1,1,1,1},{1,1,1,1},{1,1,1,1},{1,1,1,1}}};		// Idem
-int score = 123456;		// Idem
-int lignes = 120;		// Idem
+int reserve[4][4] = {{1,1,1,1},{1,1,1,1},{1,1,1,1},{1,1,1,1}};		// Test/placeholder, ne sera plus nécessaire nécessaire après l'impémentation complète de la réserve
 
 /* Initialise ncurses */
 void init_ncurses(){
@@ -66,7 +65,7 @@ void remplit_cadre(int xmin, int ymin, int source[4][4]){
 }
 
 /* Affiche la grille de jeu, à deux colonnes du bord gauche et une ligne du bord supérieur du terminal */
-void affiche_grille(int grille[20][10]){
+void affiche_grille(int grille[20][10],gamestate state){
 	erase();
 	
 	{		// Grille de jeu principale
@@ -86,10 +85,10 @@ void affiche_grille(int grille[20][10]){
 	{		// Emplacement des 4 blocs suivants
 		cadre(26,35,2,22);
 		mvprintw(1,27,"Suivants");
-		remplit_cadre(2,26,suivants[0]);
-		remplit_cadre(7,26,suivants[1]);
-		remplit_cadre(12,26,suivants[2]);
-		remplit_cadre(17,26,suivants[3]);
+		remplit_cadre(2,26,tetrominos[state.suivants[0]].rotations[0]);
+		remplit_cadre(7,26,tetrominos[state.suivants[1]].rotations[0]);
+		remplit_cadre(12,26,tetrominos[state.suivants[2]].rotations[0]);
+		remplit_cadre(17,26,tetrominos[state.suivants[3]].rotations[0]);
 	}
 	{		// Emplacement de la réserve
 		cadre(38,47,2,7);
@@ -97,13 +96,18 @@ void affiche_grille(int grille[20][10]){
 		remplit_cadre(2,38,reserve);
 	}
 	{		// Emplacement du score, vide pour l'instant
-		cadre(38,47,11,13);
-		mvprintw(10,39,"Score");
+		cadre(38,47,10,12);
+		mvprintw(9,39,"Score");
+	}
+	{		// Emplacement du niveau, vide pour l'instant
+		cadre(38,47,15,17);
+		mvprintw(14,39,"Niveau");
 	}
 	{		// Emplacement du nombre de lignes, vide pour l'instant
-		cadre(38,47,17,19);
-		mvprintw(16,39,"Lignes");
+		cadre(38,47,20,22);
+		mvprintw(19,39,"Lignes");
 	}
+
 	
 	refresh();
 	return;

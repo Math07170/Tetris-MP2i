@@ -13,7 +13,7 @@ typedef struct {
 } tetromino;
 
 void init_tetrominos();
-extern tetromino tab[];
+extern tetromino tetrominos[];
 
 bool descente_possible(gamestate* p_state, int grille[20][10]);
 void descend(gamestate* state, int grille[20][10]);
