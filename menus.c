@@ -1,7 +1,6 @@
 #include <ncurses.h>
 #include <unistd.h>
 #include <stdlib.h>
-#include <time.h>
 #include "grille.h"
 
 /* Renvoie la colonne de la plus à gauche disponible pour écrire la indice-ième lettre de l'écran titre */

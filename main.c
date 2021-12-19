@@ -10,7 +10,7 @@
 
 int grille[20][10];
 
-gamestate state;
+gamestate state;	
 
 void init_gamestate(){
 	state.block = 0;
@@ -19,12 +19,12 @@ void init_gamestate(){
 	state.y = 0;
 	state.game_speed = 5;
 	state.reserve_utilisee = false;
-	state.reserve = 0;
+	state.reserve = (rand() % 7);		// Temporairement, le tetromino dans la réserve est généré aléatoirement en début de partie
 	state.suivants[0] = (rand() % 7);
 	state.suivants[1] = (rand() % 7);
 	state.suivants[2] = (rand() % 7);
 	state.suivants[3] = (rand() % 7);
-	state.statut = 0;
+	state.statut = 0;		// 0 -> Jeu en cours ; 1 -> Jeu en pause ; 2 -> Partie perdue
 	state.descente_rapide = false;
 	state.compte_ligne = 0;
 	state.score = 0;
@@ -38,18 +38,17 @@ void interroge_commandes(gamestate* p_state, int grille[20][10]){
 	else if (cmd == 'q') deplace_gauche(p_state, grille);
 	else if (cmd == 'l') tourne_direct(p_state, grille);
 	else if (cmd == 'p') tourne_indirect(p_state, grille);
+	//else if (cmd == ' ') reserve(p_state, grille);
 	return;
 }
 
-int play = 0;		// 0 : Jeu en cours ; 1 : Pause ; 2 : Perdu
-
 /* Contient le "jeu" de Tetris en lui-même */
 void tick(){
-	play = nouveau_tetromino(&state, grille);
+	state.statut = nouveau_tetromino(&state, grille);
 	int tick_count = 0;
 	bool avance_rapide = false;
 	int lignes_supprimees = 0;
-    while(play == 0){
+    while(state.statut == 0){
 		interroge_commandes(&state,grille);
 		affiche_grille(grille,state);
 		if(tick_count == state.game_speed){
@@ -59,7 +58,7 @@ void tick(){
 			}else{
 				fixe_tetromino(state, grille);
 				state.compte_ligne += nettoie_lignes(grille);
-				play = nouveau_tetromino(&state, grille);
+				state.statut = nouveau_tetromino(&state, grille);
 			}
 		}
 		usleep(25000);	// 40 Ticks par seconde

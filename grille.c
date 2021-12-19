@@ -3,8 +3,6 @@
 #include "utils.h"
 #include "tetromino.h"
 
-int reserve[4][4] = {{1,1,1,1},{1,1,1,1},{1,1,1,1},{1,1,1,1}};		// Test/placeholder, ne sera plus nécessaire nécessaire après l'impémentation complète de la réserve
-
 /* Initialise ncurses */
 void init_ncurses(){
 	initscr();
@@ -93,7 +91,7 @@ void affiche_grille(int grille[20][10],gamestate state){
 	{		// Emplacement de la réserve
 		cadre(38,47,2,7);
 		mvprintw(1,39,"Réserve");
-		remplit_cadre(2,38,reserve);
+		remplit_cadre(2,38,tetrominos[state.reserve].rotations[0]);
 	}
 	{		// Emplacement du score, vide pour l'instant
 		cadre(38,47,10,12);
