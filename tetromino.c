@@ -265,7 +265,6 @@ void efface_tetromino(int grille[20][10], gamestate* p_state){
 				efface(grille, p_state -> y+i, p_state -> x+j);
             }
 		}
-		
 	}
 }
 
@@ -370,6 +369,14 @@ void tourne_indirect(gamestate* p_state, int grille[20][10]){
 	dessine_tetromino(grille, p_state);
 }
 
+/* Fait descendre le tetromino en cours de chute jusqu'à ce qu'il rencontre un obstacle, instantanément et sans interruption */
+void descente_instantanee(gamestate* p_state, int grille[20][10]){
+	while(descente_possible(p_state,grille)){
+		descend(p_state,grille);
+	}
+	return;
+}
+
 /* Modifie l'état du jeu pour faire apparaître le tetromino suivant en haut de la grille de jeu
  * Fait monter les autres tetrominos suivants, et génère un nouveau 4ème tetromino suivant
  * Renvoie 0 si le tetromino a pu apparaître et 2 sinon (partie perdue) */
@@ -384,6 +391,7 @@ int nouveau_tetromino(gamestate* p_state, int grille[20][10]){
 	temp.rotation_index = 0;
 	temp.x = tetrominos[temp.block].spawn_x;
 	temp.y = tetrominos[temp.block].spawn_y;
+	temp.reserve_utilisee = false;
 
 	if(mouvement_valide(grille, temp)){
 		*p_state = temp;
@@ -393,26 +401,30 @@ int nouveau_tetromino(gamestate* p_state, int grille[20][10]){
 	}
 }
 
-/* Modifie l'état du jeu pour mettre le tetromino en cours de chute dans la réserve, et le remplacer par le tetromino de la réserve
+/* Agit uniquement si le tetromino en cours de chute ne provient pas lui-même de la réserve
+ * Modifie l'état du jeu pour mettre le tetromino en cours de chute dans la réserve, et le remplacer par le tetromino de la réserve
  * Renvoie 0 si le tetromino de la reserve a pu apparaître dans la grille et 2 sinon (partie perdue)*/
-/* NE FONCTIONNE PAS POUR L'INSTANT */
-/*int reserve(gamestate* p_state,int grille[20][10]){
-	gamestate temp = *p_state;
-	
-	int bloctmp = temp.block;
-	temp.block = temp.reserve;
-	temp.reserve = bloctmp;
-	temp.rotation_index = 0;
-	temp.x = tetrominos[temp.block].spawn_x;
-	temp.y = tetrominos[temp.block].spawn_y;
-	
-	if(mouvement_valide(grille, temp)){
-		*p_state = temp;
-		return 0;
-	}else{
-		return 2;
+int reserve(gamestate* p_state,int grille[20][10]){
+	if(!p_state -> reserve_utilisee){
+		gamestate temp = *p_state;
+		
+		efface_tetromino(grille,&temp);
+		int bloctmp = temp.block;
+		temp.block = temp.reserve;
+		temp.reserve = bloctmp;
+		temp.rotation_index = 0;
+		temp.x = tetrominos[temp.block].spawn_x;
+		temp.y = tetrominos[temp.block].spawn_y;
+		temp.reserve_utilisee = true;
+		
+		if(mouvement_valide(grille, temp)){
+			*p_state = temp;
+			return 0;
+		}else{
+			return 2;
+		}
 	}
-}*/
+}
 
 /* Copie le tetromino du gamestate dans la grille de jeu */
 void fixe_tetromino(gamestate state, int grille[20][10]){

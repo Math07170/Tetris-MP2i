@@ -38,7 +38,8 @@ void interroge_commandes(gamestate* p_state, int grille[20][10]){
 	else if (cmd == 'q') deplace_gauche(p_state, grille);
 	else if (cmd == 'l') tourne_direct(p_state, grille);
 	else if (cmd == 'p') tourne_indirect(p_state, grille);
-	//else if (cmd == ' ') reserve(p_state, grille);
+	else if (cmd == ' ') reserve(p_state, grille);
+	else if (cmd == 'z') descente_instantanee(p_state, grille);
 	return;
 }
 
