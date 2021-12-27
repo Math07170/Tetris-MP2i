@@ -4,7 +4,7 @@ main.o: main.c grille.h utils.h menus.h
 	gcc -c main.c -lncurses
 grille.o: grille.c utils.h tetromino.h
 	gcc -c grille.c -lncurses
-menus.o: menus.c grille.h
+menus.o: menus.c grille.h utils.h
 	gcc -c menus.c -lncurses
 utils.o: utils.c
 	gcc -c utils.c -lncurses

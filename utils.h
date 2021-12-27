@@ -17,7 +17,7 @@ typedef struct {
     bool descente_rapide;
     int compte_ligne;
     int score;
-    int level;
+    int niveau;
 } gamestate;
 
 void wait(double time);

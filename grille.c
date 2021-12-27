@@ -19,6 +19,7 @@ void init_ncurses(){
 	init_pair(6,COLOR_WHITE,COLOR_MAGENTA);	// Couleur des blocs T
 	init_pair(7,COLOR_WHITE,COLOR_CYAN);	// Couleur des blocs I
 	init_pair(8,COLOR_WHITE,COLOR_BLACK);	// Couleur des contours (équivaut à pas de couleur du tout...)
+	init_pair(9,COLOR_GREEN,COLOR_BLACK);	// Couleur pour l'affichage des commandes dans les menus, POTENTIELLEMENT TEMPORAIRE
 }
 
 /* Vérifie qu'une case fait partie de la grille et est disponible (qu'elle contient la valeur 0) */
@@ -30,7 +31,8 @@ bool case_disponible(int grille[20][10], int i, int j){
 	} 
 }
 
-/* Affiche un cadre vide sur le terminal, de xmin à xmax en abscisse et de ymin à ymax en ordonnée */
+/* Dessine un cadre vide sur le terminal, de xmin à xmax en abscisse et de ymin à ymax en ordonnée
+ * Tous les arguments doivent être positifs */
 void cadre(int xmin, int xmax, int ymin, int ymax){
 	for(int x = xmin + 1; x < xmax; x++){
 		mvaddch(ymin,x,ACS_HLINE);
@@ -60,6 +62,16 @@ void remplit_cadre(int xmin, int ymin, int source[4][4]){
 			}
 		}
 	}
+}
+
+/* Écrit les n chiffres le plus à droite de l'entier source, en commençant à la x iéme case de la ligne y
+ * Tous les arguments doivent être positifs */
+void affiche_nombre(int n, int source, int y, int x){
+	for(int i = n; i > 0; i--){
+		mvprintw(y,x+i,"%d",source % 10);
+		source /= 10;
+	}
+	return;
 }
 
 /* Affiche la grille de jeu, à deux colonnes du bord gauche et une ligne du bord supérieur du terminal */
@@ -96,16 +108,18 @@ void affiche_grille(int grille[20][10],gamestate state){
 	{		// Emplacement du score, vide pour l'instant
 		cadre(38,47,10,12);
 		mvprintw(9,39,"Score");
+		affiche_nombre(6,state.score,11,39);
 	}
 	{		// Emplacement du niveau, vide pour l'instant
 		cadre(38,47,15,17);
 		mvprintw(14,39,"Niveau");
+		affiche_nombre(2,state.niveau,16,39);
 	}
 	{		// Emplacement du nombre de lignes, vide pour l'instant
 		cadre(38,47,20,22);
 		mvprintw(19,39,"Lignes");
+		affiche_nombre(3,state.compte_ligne,21,39);
 	}
-
 	
 	refresh();
 	return;

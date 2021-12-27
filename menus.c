@@ -2,6 +2,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include "grille.h"
+#include "utils.h"
 
 /* Renvoie la colonne de la plus à gauche disponible pour écrire la indice-ième lettre de l'écran titre */
 int min_x(int indice){
@@ -85,18 +86,95 @@ void affiche_ecran_titre(int clr[6]){
 	return;
 }
 
+/* Affiche les commandes du jeu, ne permet pas encore de les modifier */
+void affiche_commandes(){
+	erase();
+	cadre(5,41,2,20);
+	
+	attron(A_BOLD);
+	mvprintw(4,18,"COMMANDES");
+	attroff(A_BOLD);
+			
+	attron(COLOR_PAIR(9));
+	mvaddch(6,9,'L');
+	mvaddch(8,9,'P');
+	mvaddch(10,9,'Q');
+	mvaddch(12,9,'D');
+	mvaddch(14,9,'S');
+	mvaddch(16,9,'Z');
+	mvprintw(18,7,"Espace");
+	attroff(COLOR_PAIR(9));
+	
+			// Usage des accents avec ncurses à investiguer
+	mvprintw(6,17,"Rotation anti-horaire");
+	mvprintw(8,17,"Rotation horaire");
+	mvprintw(10,17,"Translation gauche");
+	mvprintw(12,17,"Translation droite");
+	mvprintw(14,17,"Descente rapide");
+	mvprintw(16,17,"Descente directe");
+	mvprintw(18,17,"Reserve");		// Écrire "réserve" avec un accent pose problème, il faut trouver un synonyme...
+	
+	refresh();
+	
+	while(getch() != '\n'){
+		usleep(25000);		// 40 TPS
+	}
+	return;
+}
+
 /* Affiche l'écran titre du jeu tant que l'utilisateur n'appuie pas sur entrée */		// TODO : affichage et modification des commandes
 void ecran_titre(){
 	int tick_count = 0;
 	int clr[6] = {(rand()%6) + 2,(rand()%6) + 2,(rand()%6) + 2,(rand()%6) + 2,(rand()%6) + 2,(rand()%6) + 2};
-	while(getch() != '\n'){
+	char cmd = getch();
+	while((cmd != '\n') && (cmd != ' ')){
 		affiche_ecran_titre(clr);
 		usleep(25000);		// 40 TPS
 		if(tick_count == 20){
 			change_couleur_lettre_titre(clr);
 			tick_count = 0;
 		}
+		refresh();
 		tick_count++;
+		cmd = getch();
 	}
-	return;
+	if(cmd == ' '){		// Cas ou l'utilisateur a appuyé sur espace : affichage des commandes
+		affiche_commandes();
+		return;
+	}else{		// Cas où l'utilisateur a appuyé sur entrée : démarre directement le jeu
+		return;
+	}
+}
+
+/* Affiche le texte de fin de partie */
+bool fin_partie(gamestate state){
+	erase();
+	
+	attron(A_BOLD);
+	mvprintw(5,31,"PERDU !");
+	mvprintw(7,26,"Essayez encore !");
+	attroff(A_BOLD);
+	
+	mvprintw(13,24,"Score : ");
+	affiche_nombre(6,state.score,13,31);
+	
+	affiche_nombre(3,state.compte_ligne,15,23);
+	mvprintw(15,28,"lignes, niveau");
+	affiche_nombre(2,state.niveau,15,42);
+	
+	mvprintw(21,11,"Entrée : Rejouer");
+	mvprintw(21,41,"Q : Fermer le jeu");
+	
+	refresh();
+	
+	char cmd = getch();
+	while((cmd != '\n') && (cmd != 'q')){
+		usleep(25000);		// 40 TPS
+		cmd = getch();
+	}
+	if(cmd == '\n'){
+		return true;
+	}else{
+		return false;
+	}
 }

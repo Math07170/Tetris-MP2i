@@ -28,7 +28,7 @@ void init_gamestate(){
 	state.descente_rapide = false;
 	state.compte_ligne = 0;
 	state.score = 0;
-	state.level = 0;
+	state.niveau = 0;
 }
 
 /* Agit sur le tetromino en cours de chute, selon l'entrée clavier */		// À déplacer...
@@ -72,13 +72,17 @@ int main() {
     init_ncurses();
     srand(time(0));		// "Initialise l'aléatoire" de façon à avoir une suite de tetrominos différente à chaque exécution
     
-	ecran_titre();		// TODO : affichage et modification des commandes
+	ecran_titre();		// TODO : modification des commandes
     
-   	init_gamestate();
-	init_tetrominos();
-	initialise_grille(grille);
-    
-	tick();
+	init_tetrominos();		// N'a pas besoin d'être initialisé à chaque partie
+	bool lance_partie = true;
+	
+	while(lance_partie){
+		initialise_grille(grille);
+		init_gamestate();
+		tick();
+		lance_partie = fin_partie(state);
+	}
 	
 	endwin();
 	return 0;
