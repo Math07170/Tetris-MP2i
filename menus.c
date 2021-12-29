@@ -115,7 +115,6 @@ void affiche_commandes(){
 	mvprintw(18,17,"Reserve");		// Écrire "réserve" avec un accent pose problème, il faut trouver un synonyme...
 	
 	refresh();
-	
 	while(getch() != '\n'){
 		usleep(25000);		// 40 TPS
 	}

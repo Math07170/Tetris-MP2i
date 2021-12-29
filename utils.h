@@ -19,7 +19,6 @@ typedef struct {
     int score;
     int niveau;
 } gamestate;
-
 void wait(double time);
 
 #endif
