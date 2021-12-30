@@ -15,11 +15,15 @@ typedef struct {
     int suivants[4];
     int statut;
     bool descente_rapide;
-    //bool descente_instantanee_utilisee;		// TEST
+    bool descente_instantanee;
     int compte_ligne;
     int score;
     int niveau;
 } gamestate;
-void wait(double time);
+
+//void wait(double time);	?
+void init_gamestate(gamestate* p_state);
+void change_niveau(gamestate* p_state);
+void augmente_score(gamestate* p_state, int nbligne);
 
 #endif

@@ -371,10 +371,7 @@ void tourne_indirect(gamestate* p_state, int grille[20][10]){
 
 /* Fait descendre le tetromino en cours de chute jusqu'à ce qu'il rencontre un obstacle, instantanément et sans interruption */
 void descente_instantanee(gamestate* p_state, int grille[20][10]){
-	while(descente_possible(p_state,grille)){
-		descend(p_state,grille);
-	}
-	//p_state -> descente_instantanee_utilisee = true;		// TEST
+	p_state -> descente_instantanee = true;
 	return;
 }
 
@@ -393,7 +390,7 @@ int nouveau_tetromino(gamestate* p_state, int grille[20][10]){
 	temp.x = tetrominos[temp.block].spawn_x;
 	temp.y = tetrominos[temp.block].spawn_y;
 	temp.reserve_utilisee = false;
-	//temp.descente_instantanee_utilisee = false;		// TEST
+	temp.descente_instantanee = false;
 
 	if(mouvement_valide(grille, temp)){
 		*p_state = temp;
