@@ -6,9 +6,9 @@ grille.o: grille.c utils.h tetromino.h
 	gcc -c grille.c -lncurses
 menus.o: menus.c grille.h utils.h
 	gcc -c menus.c -lncurses
-utils.o: utils.c
+utils.o: utils.c tetromino.h
 	gcc -c utils.c -lncurses
-tetromino.o: tetromino.c
+tetromino.o: tetromino.c utils.h
 	gcc -c tetromino.c -lncurses
 clean:
 	rm -f *.o
