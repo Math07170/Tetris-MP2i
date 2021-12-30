@@ -291,7 +291,7 @@ bool mouvement_valide(int grille[20][10], gamestate state){
             if(tetrominos[state.block].rotations[state.rotation_index][i][j] != 0){				
 				if(case_disponible(grille, state.y+i, state.x+j) == true){
 					continue;
-				} 
+				}
 				else{
 					return(false);	
 				}
@@ -374,6 +374,7 @@ void descente_instantanee(gamestate* p_state, int grille[20][10]){
 	while(descente_possible(p_state,grille)){
 		descend(p_state,grille);
 	}
+	//p_state -> descente_instantanee_utilisee = true;		// TEST
 	return;
 }
 
@@ -392,9 +393,11 @@ int nouveau_tetromino(gamestate* p_state, int grille[20][10]){
 	temp.x = tetrominos[temp.block].spawn_x;
 	temp.y = tetrominos[temp.block].spawn_y;
 	temp.reserve_utilisee = false;
+	//temp.descente_instantanee_utilisee = false;		// TEST
 
 	if(mouvement_valide(grille, temp)){
 		*p_state = temp;
+		dessine_tetromino(grille,p_state);		// Sert à ce que le prochain tetromino soit affiché directement
 		return 0;
 	}else{
 		return 2;

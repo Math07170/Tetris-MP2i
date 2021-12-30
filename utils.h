@@ -15,6 +15,7 @@ typedef struct {
     int suivants[4];
     int statut;
     bool descente_rapide;
+    //bool descente_instantanee_utilisee;		// TEST
     int compte_ligne;
     int score;
     int niveau;

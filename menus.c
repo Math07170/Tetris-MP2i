@@ -116,7 +116,7 @@ void affiche_commandes(){
 	
 	refresh();
 	while(getch() != '\n'){
-		usleep(25000);		// 40 TPS
+		usleep(16667);
 	}
 	return;
 }
@@ -128,7 +128,7 @@ void ecran_titre(){
 	char cmd = getch();
 	while((cmd != '\n') && (cmd != ' ')){
 		affiche_ecran_titre(clr);
-		usleep(25000);		// 40 TPS
+		usleep(16667);
 		if(tick_count == 20){
 			change_couleur_lettre_titre(clr);
 			tick_count = 0;
@@ -168,7 +168,7 @@ bool fin_partie(gamestate state){
 	
 	char cmd = getch();
 	while((cmd != '\n') && (cmd != 'q')){
-		usleep(25000);		// 40 TPS
+		usleep(16667);
 		cmd = getch();
 	}
 	if(cmd == '\n'){

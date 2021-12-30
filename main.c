@@ -26,6 +26,7 @@ void init_gamestate(){
 	state.suivants[3] = (rand() % 7);
 	state.statut = 0;		// 0 -> Jeu en cours ; 1 -> Jeu en pause ; 2 -> Partie perdue
 	state.descente_rapide = false;
+	//state.descente_instantanee_utilisee = false;		// TEST
 	state.compte_ligne = 0;
 	state.score = 0;
 	state.niveau = 0;
@@ -55,7 +56,7 @@ void tick(){
 		affiche_grille(grille,state);
 		if(tick_count == state.game_speed || state.descente_rapide){
 			tick_count = tick_count%state.game_speed;
-			if(descente_possible(&state,grille) == true){
+			if(descente_possible(&state,grille)){
 				descend(&state, grille);
 			}else{
 				fixe_tetromino(state, grille);
@@ -96,7 +97,7 @@ void tick(){
 			}
 			state.descente_rapide = false;
 		}
-		usleep(16670);	// 40 Ticks par seconde
+		usleep(16667);	// 60 Ticks par seconde
 		tick_count++;
 	}
 }
@@ -108,7 +109,7 @@ int main() {
     
 	ecran_titre();		// TODO : modification des commandes
     
-	init_tetrominos();		// N'a pas besoin d'être initialisé à chaque partie
+	init_tetrominos();		// N'a pas besoin d'être initialisé à chaque partie, une initialisation au lancement du programme est suffisante
 	bool lance_partie = true;
 	
 	while(lance_partie){
