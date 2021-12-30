@@ -324,7 +324,14 @@ void descend(gamestate* p_state, int grille[20][10]){
 	}
 	return;
 }
-
+/* Fait descendre le tetromino instantanément */
+void descente_instantanee(gamestate* p_state, int grille[20][10]){
+	while(descente_possible(p_state,grille)){
+				descend(p_state,grille);
+	}
+	suivant(p_state,grille);
+	return;
+}
 /* Déplace le tetromino vers la droite (touche q) */
 void deplace_droite(gamestate* p_state, int grille[20][10]){
 	gamestate temp = *p_state;
@@ -369,12 +376,6 @@ void tourne_indirect(gamestate* p_state, int grille[20][10]){
 	dessine_tetromino(grille, p_state);
 }
 
-/* Fait descendre le tetromino en cours de chute jusqu'à ce qu'il rencontre un obstacle, instantanément et sans interruption */
-void descente_instantanee(gamestate* p_state, int grille[20][10]){
-	p_state -> descente_instantanee = true;
-	return;
-}
-
 /* Modifie l'état du jeu pour faire apparaître le tetromino suivant en haut de la grille de jeu
  * Fait monter les autres tetrominos suivants, et génère un nouveau 4ème tetromino suivant
  * Renvoie 0 si le tetromino a pu apparaître et 2 sinon (partie perdue) */
@@ -390,7 +391,6 @@ int nouveau_tetromino(gamestate* p_state, int grille[20][10]){
 	temp.x = tetrominos[temp.block].spawn_x;
 	temp.y = tetrominos[temp.block].spawn_y;
 	temp.reserve_utilisee = false;
-	temp.descente_instantanee = false;
 
 	if(mouvement_valide(grille, temp)){
 		*p_state = temp;

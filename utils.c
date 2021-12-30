@@ -2,7 +2,7 @@
 #include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
-
+#include "tetromino.h"
 /* Permet d'attendre un temps donné mais ne fonctionne pas */
 /* void wait(double towait){
     time_t end = time(NULL) + towait;
@@ -28,7 +28,6 @@ void init_gamestate(gamestate* p_state){
 	p_state -> suivants[3] = (rand() % 7);
 	p_state -> statut = 0;		// 0 -> Jeu en cours ; 1 -> Jeu en pause ; 2 -> Partie perdue
 	p_state -> descente_rapide = false;
-	p_state -> descente_instantanee = false;
 	p_state -> compte_ligne = 0;
 	p_state -> score = 0;
 	p_state -> niveau = 0;
@@ -72,4 +71,15 @@ void augmente_score(gamestate* p_state, int nbligne){
 		case 4: p_state -> score += 1200 * (p_state -> niveau+1); break;
 	}
 	return;	
+}
+
+/* Fixe le tetromino courant et fait apparaître le suivant, tout en nettoyant les lignes pleines et en mettant à jour le score, le niveau et le nombre de lignes */
+void suivant(gamestate* p_state,int grille[20][10]){		// Nom de la fonction à changer ?
+	fixe_tetromino(*p_state, grille);
+	int nbligne = nettoie_lignes(grille);
+	augmente_score(p_state,nbligne);
+	p_state->compte_ligne += nbligne;
+	change_niveau(p_state);
+	p_state->statut = nouveau_tetromino(p_state, grille);
+	return;
 }

@@ -25,16 +25,6 @@ void interroge_commandes(gamestate* p_state, int grille[20][10]){
 	return;
 }
 
-/* Fixe le tetromino courant et fait apparaître le suivant, tout en nettoyant les lignes pleines et en mettant à jour le score, le niveau et le nombre de lignes */
-void suivant(gamestate* p_state,int grille[20][10]){		// Nom de la fonction à changer ?
-	fixe_tetromino(*p_state, grille);
-	int nbligne = nettoie_lignes(grille);
-	augmente_score(p_state,nbligne);
-	state.compte_ligne += nbligne;
-	change_niveau(p_state);
-	state.statut = nouveau_tetromino(p_state, grille);
-	return;
-}
 
 /* Contient le "jeu" de Tetris en lui-même */
 void tick(){
@@ -53,11 +43,6 @@ void tick(){
 				suivant(&state,grille);
 			}
 			state.descente_rapide = false;
-		}else if(state.descente_instantanee){
-			while(descente_possible(&state,grille)){
-				descend(&state,grille);
-			}
-			suivant(&state,grille);
 		}
 		usleep(16667);	// 60 Ticks par seconde
 		tick_count++;
