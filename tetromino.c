@@ -419,6 +419,7 @@ int reserve(gamestate* p_state,int grille[20][10]){
 		
 		if(mouvement_valide(grille, temp)){
 			*p_state = temp;
+			dessine_tetromino(grille,p_state);		// Sert à ce que le tetromino sortant de la réserve soit affiché directement
 			return 0;
 		}else{
 			return 2;
