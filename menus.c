@@ -4,6 +4,73 @@
 #include "grille.h"
 #include "utils.h"
 
+typedef struct {
+    char* label;
+    int x;
+    int y;
+    int id;
+    void (*onclick)(int, menu*);
+} button;
+typedef struct{
+    int nbr;
+    char* title;
+    int x;
+    int y;
+    button* buttons;
+    int selected;
+} menu;
+void menuloop(menu m);
+keybind * bind;
+void addbutton(menu* m, int x, int y, char* label, void (*onclick)(int, menu*)){
+	m->nbr++;
+	button b;
+	b.x = x;
+	b.y = y;
+	b.label = label;
+	b.onclick = onclick;
+	b.id = m->nbr-1;
+	m->buttons[m->nbr-1] = b;
+}
+void display(menu m){
+    erase();
+	attroff(COLOR_PAIR(1));
+    attron(A_BOLD);
+	mvprintw(m.x,m.y,m.title);
+	attroff(A_BOLD);
+    for(int i = 0; i<m.nbr; i++){
+        button b = m.buttons[i];
+		attroff(COLOR_PAIR(9));
+        if(m.selected == b.id){
+            attron(COLOR_PAIR(9));
+        }
+        mvprintw(b.x, b.y, b.label);
+    }
+    refresh();
+	
+}
+void menuloop(menu m){
+    int running = 1;
+    while(running == 1){
+        char input = getch();
+		if(input == ' '){
+			running = 0;
+		}
+        else if(input == 'z'){
+            if(m.selected > 0) m.selected --;
+			display(m);
+        }
+        else if(input == 's'){
+            if(m.selected < m.nbr-1) m.selected ++;
+			display(m);
+        }
+        else if(input == '\n'){
+            (m.buttons[m.selected].onclick(m.selected, &m));
+        }
+		
+		usleep(16667);
+    }
+}
+
 /* Renvoie la colonne de la plus à gauche disponible pour écrire la indice-ième lettre de l'écran titre */
 int min_x(int indice){
 	return 2 + 16 * indice;
@@ -85,44 +152,44 @@ void affiche_ecran_titre(int clr[6]){
 	refresh();
 	return;
 }
-
-/* Affiche les commandes du jeu, ne permet pas encore de les modifier */
-void affiche_commandes(){
-	erase();
-	cadre(5,41,2,20);
-	
-	attron(A_BOLD);
-	mvprintw(4,18,"COMMANDES");
-	attroff(A_BOLD);
-			
-	attron(COLOR_PAIR(9));
-	mvaddch(6,9,'L');
-	mvaddch(8,9,'P');
-	mvaddch(10,9,'Q');
-	mvaddch(12,9,'D');
-	mvaddch(14,9,'S');
-	mvaddch(16,9,'Z');
-	mvprintw(18,7,"Espace");
-	attroff(COLOR_PAIR(9));
-	
-			// Usage des accents avec ncurses à investiguer
-	mvprintw(6,17,"Rotation anti-horaire");
-	mvprintw(8,17,"Rotation horaire");
-	mvprintw(10,17,"Translation gauche");
-	mvprintw(12,17,"Translation droite");
-	mvprintw(14,17,"Descente rapide");
-	mvprintw(16,17,"Descente directe");
-	mvprintw(18,17,"Reserve");		// Écrire "réserve" avec un accent pose problème, il faut trouver un synonyme...
-	
-	refresh();
-	while(getch() != '\n'){
-		usleep(16667);
+void onclick(int selected, menu* m){
+	switch(selected){
+		case 0: bind->tourne_direct = getchar(); break;
+		case 1: bind->tourne_indirect = getchar(); break;
+		case 2: bind->gauche = getchar(); break;
+		case 3: bind->droite = getchar(); break;
+		case 4: bind->descente_rapide = getchar(); break;
+		case 5: bind->descente_instantanee = getchar(); break;
+		case 6: bind->reserve = getchar(); break;
 	}
+
+	save_config(*bind);
+}
+/* Affiche les commandes du jeu, ne permet pas encore de les modifier */
+void affiche_commandes(keybind* bind){
+	menu m;
+	m.nbr=0;
+    m.title = "COMMANDES";
+    m.x = 4;
+    m.y = 18;
+	button buttons[20];
+    m.buttons = buttons;
+    m.selected=0;
+	addbutton(&m, 6, 17, "Rotation anti-horraire", onclick);
+	addbutton(&m, 8, 17, "Rotation horraire", onclick);
+	addbutton(&m, 10, 17, "Translation gauche", onclick);
+	addbutton(&m, 12, 17, "Translation droite", onclick);
+	addbutton(&m, 14, 17, "Descente rapide", onclick);
+	addbutton(&m, 16, 17, "Descente directe", onclick);
+	addbutton(&m, 18, 17, "Reserve", onclick);
+	display(m);
+	menuloop(m);
 	return;
 }
 
 /* Affiche l'écran titre du jeu tant que l'utilisateur n'appuie pas sur entrée */		// TODO : affichage et modification des commandes
-void ecran_titre(){
+void ecran_titre(keybind* bindp){
+	bind=bindp;
 	int tick_count = 0;
 	int clr[6] = {(rand()%6) + 2,(rand()%6) + 2,(rand()%6) + 2,(rand()%6) + 2,(rand()%6) + 2,(rand()%6) + 2};
 	char cmd = getch();
@@ -138,7 +205,7 @@ void ecran_titre(){
 		cmd = getch();
 	}
 	if(cmd == ' '){		// Cas ou l'utilisateur a appuyé sur espace : affichage des commandes
-		affiche_commandes();
+		affiche_commandes(bind);
 		return;
 	}else{		// Cas où l'utilisateur a appuyé sur entrée : démarre directement le jeu
 		return;

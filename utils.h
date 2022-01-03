@@ -5,6 +5,16 @@
 #include <stdbool.h>
 
 typedef struct {
+    char descente_rapide;
+    char descente_instantanee;
+    char reserve;
+    char gauche;
+    char droite;
+    char tourne_direct;
+    char tourne_indirect;   
+} keybind;
+
+typedef struct {
     int block;
     int rotation_index;
     int x;
@@ -21,6 +31,8 @@ typedef struct {
 } gamestate;
 
 //void wait(double time);	?
+void save_config(keybind tosave);
+keybind load_config();
 void init_gamestate(gamestate* p_state);
 void change_niveau(gamestate* p_state);
 void augmente_score(gamestate* p_state, int nbligne);

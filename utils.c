@@ -13,6 +13,36 @@
 	}
 }*/
 
+void save_config(keybind tosave){
+	FILE* file;
+	if((file = fopen("./keybind.bin","wb+")) == NULL){
+		printf("Erreur lors de l'écriture de 'keybind.bin' !");
+        exit(1);
+	}
+	fwrite(&tosave, sizeof(keybind), 1, file);
+	fclose(file);
+	return;
+}
+keybind load_config(){
+	FILE* file;
+	keybind res;
+	if ((file = fopen("./keybind.bin","rb")) == NULL){
+		keybind def = {
+		   's',
+		   ' ',
+		   'r',
+		   'q',
+		   'd',
+		   'a',
+		   'e'
+		};
+		save_config(def);
+		return def;
+   }
+   fread(&res, sizeof(keybind), 1, file);
+   fclose(file);
+   return res;
+}
 /* Initialise l'état du jeu aux valeurs qu'il doit avoir à chaque début de partie */
 void init_gamestate(gamestate* p_state){
 	p_state -> block = 0;

@@ -11,17 +11,18 @@
 int grille[20][10];
 
 gamestate state;
+keybind binding;
 
 /* Agit sur le tetromino en cours de chute, selon l'entrée clavier */		// À déplacer...
 void interroge_commandes(gamestate* p_state, int grille[20][10]){
 	char cmd = getch();
-	if(cmd == 'd') deplace_droite(p_state, grille);
-	else if (cmd == 'q') deplace_gauche(p_state, grille);
-	else if (cmd == 'l') tourne_direct(p_state, grille);
-	else if (cmd == 'p') tourne_indirect(p_state, grille);
-	else if (cmd == ' ') reserve(p_state, grille);
-	else if (cmd == 's') p_state -> descente_rapide = true;
-	else if (cmd == 'z') descente_instantanee(p_state, grille);
+	if(cmd == binding.droite) deplace_droite(p_state, grille);
+	else if (cmd == binding.gauche) deplace_gauche(p_state, grille);
+	else if (cmd == binding.tourne_direct) tourne_direct(p_state, grille);
+	else if (cmd == binding.tourne_indirect) tourne_indirect(p_state, grille);
+	else if (cmd == binding.reserve) reserve(p_state, grille);
+	else if (cmd == binding.descente_rapide) p_state -> descente_rapide = true;
+	else if (cmd == binding.descente_instantanee) descente_instantanee(p_state, grille);
 	return;
 }
 
@@ -50,11 +51,12 @@ void tick(){
 }
 
 int main() {
+	binding = load_config();
 
     init_ncurses();
     srand(time(0));		// "Initialise l'aléatoire" de façon à avoir une suite de tetrominos différente à chaque exécution
     
-	ecran_titre();		// TODO : modification des commandes
+	ecran_titre(&binding);		// TODO : modification des commandes
     
 	init_tetrominos();		// N'a pas besoin d'être initialisé à chaque partie, une initialisation au lancement du programme est suffisante
 	bool lance_partie = true;
