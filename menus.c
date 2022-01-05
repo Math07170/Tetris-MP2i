@@ -11,6 +11,7 @@ typedef struct {
     int id;
     void (*onclick)(int, void*);
 } button;
+
 typedef struct{
     int nbr;
     char* title;
@@ -19,8 +20,10 @@ typedef struct{
     button* buttons;
     int selected;
 } menu;
+
 void menuloop(menu m);
 keybind * bind;
+
 void addbutton(menu* m, int x, int y, char* label, void (*onclick)(int, void*)){
 	m->nbr++;
 	button b;
@@ -31,6 +34,7 @@ void addbutton(menu* m, int x, int y, char* label, void (*onclick)(int, void*)){
 	b.id = m->nbr-1;
 	m->buttons[m->nbr-1] = b;
 }
+
 void display(menu m){
     erase();
 	attroff(COLOR_PAIR(1));
@@ -48,6 +52,7 @@ void display(menu m){
     refresh();
 	
 }
+
 void menuloop(menu m){
     int running = 1;
     while(running == 1){
@@ -72,17 +77,35 @@ void menuloop(menu m){
     }
 }
 
-/* Renvoie la colonne de la plus à gauche disponible pour écrire la indice-ième lettre de l'écran titre */
+/* Les quatre fonctions suivantes renvoient les coordonnées maximum et minimum du rectangle qui accueillira la lettre d'indice indice
+ * x représente l'indice de la colonne et y celui de la ligne
+ * L'entier indice doit être positif */
 int min_x(int indice){
-	return 2 + 16 * indice;
+	return 2 + 8 * (indice % 11);
 }
 
-/* Renvoie la colonne à droite de l'espace disponible pour écrire la indice-ième lettre de l'écran titre */
 int max_x(int indice){
-	return 2 + 16 * (indice + 1);
+	return 2 + 8 * ((indice % 11)+ 1);
 }
 
-/* Remplit avec la couleur correspondant à l'indice "couleur" un rectangle de cases, avec les minimums inclus et les maximums exclus */
+int min_y(int indice){
+	if(indice < 11){
+		return 4;
+	}else{
+		return 13;
+	}
+}
+
+int max_y(int indice){
+	if(indice < 11){
+		return 13;
+	}else{
+		return 22;
+	}
+}
+
+/* Remplit avec la couleur correspondant à l'indice "couleur" un rectangle de cases, avec les minimums inclus et les maximums exclus
+ * Les arguments doivent être positifs, avec xmin < xmax et ymin < ymax */
 void remplit(int couleur,int xmin,int xmax,int ymin,int ymax){
 	attron(COLOR_PAIR(couleur));
 	for(int x = xmin; x < xmax; x++){
@@ -94,65 +117,152 @@ void remplit(int couleur,int xmin,int xmax,int ymin,int ymax){
 	return;
 }
 
-/* Choisit aléatoirement une lettre du titre et change sa couleur */
-void change_couleur_lettre_titre(int clr[6]){
-	int couleur_a_changer = rand() % 6;
+/* Choisit aléatoirement une lettre du titre et change sa couleur 
+ * Peut ne changer aucune couleur si l'indice choisi correspond à un espace, ou si la nouvelle couleur est la même que l'ancienne */
+void change_couleur_lettre_titre(int clr[22]){
+	int couleur_a_changer = rand() % 22;
 	clr[couleur_a_changer] = (rand() % 6)+2;
 	return;
 }
 
-/* Affiche l'écran titre du jeu à un instant donné */
-void affiche_ecran_titre(int clr[6]){
+/* Affiche l'écran titre du jeu à un instant donné 
+ * Le tableau clr doit contenir des entiers compris entre 2 et 8, correspondant à certaines couleurs */
+void affiche_ecran_titre(int clr[22]){
 	
 	attron(A_BOLD);
-	mvprintw(2,33,"Mathias et Barnabé présentent...");
+	mvprintw(2,29,"Mathias et Barnabé présentent...");
 	attroff(A_BOLD);
-	mvprintw(21,13,"Appuyez sur entrée pour démarrer, ou sur espace pour voir les commandes.");
+	mvprintw(23,21,"Entrée : Jouer               Espace : Commandes");
 	
 	int indice = 0;		// Position de la lettre
 	
-	// T, x de 2 à 18
-	remplit(clr[0],min_x(indice) + 2, max_x(indice) - 2, 5, 7);
-	remplit(clr[0],min_x(indice)+6,max_x(indice)-6,7,19);
+	// PREMIÈRE LIGNE, y de 4 à 13
+	
+	// Espace, x de 2 à 10
 	indice++;
 	
-	// E, x de 18 à 34
-	remplit(clr[1],min_x(indice) + 2, max_x(indice) - 2, 5, 7);
-	remplit(clr[1],min_x(indice) + 2, max_x(indice) - 2, 11, 13);
-	remplit(clr[1],min_x(indice) + 2, max_x(indice) - 2, 17, 19);
-	remplit(clr[1],min_x(indice) + 2, max_x(indice) - 10, 7, 19);
+	// L, x de 10 à 18
+	remplit(clr[indice],min_x(indice)+1,min_x(indice)+3,min_y(indice)+1,max_y(indice)-1);
+	remplit(clr[indice],min_x(indice)+1,max_x(indice)-1,max_y(indice)-2,max_y(indice)-1);
+	indice++;
+	// E, x de 18 à 26
+	remplit(clr[indice],min_x(indice)+1,min_x(indice)+3,min_y(indice)+1,max_y(indice)-1);
+	remplit(clr[indice],min_x(indice)+1,max_x(indice)-1,min_y(indice)+1,min_y(indice)+2);
+	remplit(clr[indice],min_x(indice)+1,max_x(indice)-1,min_y(indice)+4,max_y(indice)-4);
+	remplit(clr[indice],min_x(indice)+1,max_x(indice)-1,max_y(indice)-2,max_y(indice)-1);
+	indice++;
+	// S, etc.
+	remplit(clr[indice],min_x(indice)+1,min_x(indice)+3,min_y(indice)+2,min_y(indice)+4);
+	remplit(clr[indice],max_x(indice)-3,max_x(indice)-1,max_y(indice)-4,max_y(indice)-2);
+	remplit(clr[indice],min_x(indice)+2,max_x(indice)-2,min_y(indice)+1,min_y(indice)+2);
+	remplit(clr[indice],min_x(indice)+2,max_x(indice)-2,min_y(indice)+4,max_y(indice)-4);
+	remplit(clr[indice],min_x(indice)+2,max_x(indice)-2,max_y(indice)-2,max_y(indice)-1);
+	indice++;
+	// Espace
 	indice++;
 	
-	// T, x de 34 à 50
-	remplit(clr[2],min_x(indice) + 2, max_x(indice) - 2, 5, 7);
-	remplit(clr[2],min_x(indice)+6,max_x(indice)-6,7,19);
-	indice++;;
-	
-	// R, x de 50 à 66
-	remplit(clr[3],min_x(indice)+2,max_x(indice)-4,5,7);
-	remplit(clr[3],min_x(indice)+2,max_x(indice)-4,11,13);
-	remplit(clr[3],min_x(indice)+2,max_x(indice)-10,7,19);
-	remplit(clr[3],min_x(indice)+10,max_x(indice)-2,7,11);
-	remplit(clr[3],min_x(indice)+6,max_x(indice)-6,13,15);
-	remplit(clr[3],min_x(indice)+8,max_x(indice)-4,15,17);
-	remplit(clr[3],min_x(indice)+10,max_x(indice)-2,17,19);
+	// B
+	remplit(clr[indice],min_x(indice)+1,min_x(indice)+3,min_y(indice)+1,max_y(indice)-1);
+	remplit(clr[indice],max_x(indice)-3,max_x(indice)-1,min_y(indice)+2,min_y(indice)+4);
+	remplit(clr[indice],max_x(indice)-3,max_x(indice)-1,max_y(indice)-4,max_y(indice)-2);
+	remplit(clr[indice],min_x(indice)+1,max_x(indice)-2,min_y(indice)+1,min_y(indice)+2);
+	remplit(clr[indice],min_x(indice)+1,max_x(indice)-2,min_y(indice)+4,max_y(indice)-4);
+	remplit(clr[indice],min_x(indice)+1,max_x(indice)-2,max_y(indice)-2,max_y(indice)-1);
+	indice++;
+	// L
+	remplit(clr[indice],min_x(indice)+1,min_x(indice)+3,min_y(indice)+1,max_y(indice)-1);
+	remplit(clr[indice],min_x(indice)+1,max_x(indice)-1,max_y(indice)-2,max_y(indice)-1);
+	indice++;
+	// O
+	remplit(clr[indice],min_x(indice)+1,min_x(indice)+3,min_y(indice)+2,max_y(indice)-2);
+	remplit(clr[indice],max_x(indice)-3,max_x(indice)-1,min_y(indice)+2,max_y(indice)-2);
+	remplit(clr[indice],min_x(indice)+2,max_x(indice)-2,max_y(indice)-2,max_y(indice)-1);
+	remplit(clr[indice],min_x(indice)+2,max_x(indice)-2,min_y(indice)+1,min_y(indice)+2);
+	indice++;
+	// C
+	remplit(clr[indice],min_x(indice)+1,min_x(indice)+3,min_y(indice)+2,max_y(indice)-2);
+	remplit(clr[indice],min_x(indice)+2,max_x(indice)-2,max_y(indice)-2,max_y(indice)-1);
+	remplit(clr[indice],min_x(indice)+2,max_x(indice)-2,min_y(indice)+1,min_y(indice)+2);
+	indice++;
+	// S
+	remplit(clr[indice],min_x(indice)+1,min_x(indice)+3,min_y(indice)+2,min_y(indice)+4);
+	remplit(clr[indice],max_x(indice)-3,max_x(indice)-1,max_y(indice)-4,max_y(indice)-2);
+	remplit(clr[indice],min_x(indice)+2,max_x(indice)-2,min_y(indice)+1,min_y(indice)+2);
+	remplit(clr[indice],min_x(indice)+2,max_x(indice)-2,min_y(indice)+4,max_y(indice)-4);
+	remplit(clr[indice],min_x(indice)+2,max_x(indice)-2,max_y(indice)-2,max_y(indice)-1);
+	indice++;
+	// Espace
 	indice++;
 	
-	// I, x de 66 à 82
-	remplit(clr[4],min_x(indice)+6,max_x(indice)-6,5,7);
-	remplit(clr[4],min_x(indice)+6,max_x(indice)-6,9,19);
+	// DEUXIÈME LIGNE, y de 13 à 22
+	
+	// Q, à nouveau x de 10 à 18
+	remplit(clr[indice],min_x(indice)+1,min_x(indice)+3,min_y(indice)+2,max_y(indice)-2);
+	remplit(clr[indice],max_x(indice)-3,max_x(indice)-1,min_y(indice)+2,max_y(indice)-3);
+	remplit(clr[indice],min_x(indice)+2,max_x(indice)-1,max_y(indice)-2,max_y(indice)-1);
+	remplit(clr[indice],min_x(indice)+2,max_x(indice)-2,min_y(indice)+1,min_y(indice)+2);
+	remplit(clr[indice],max_x(indice)-4,max_x(indice)-2,max_y(indice)-3,max_y(indice)-2);
+	indice++;
+	// U
+	remplit(clr[indice],min_x(indice)+1,min_x(indice)+3,min_y(indice)+1,max_y(indice)-2);
+	remplit(clr[indice],max_x(indice)-3,max_x(indice)-1,min_y(indice)+1,max_y(indice)-2);
+	remplit(clr[indice],min_x(indice)+2,max_x(indice)-2,max_y(indice)-2,max_y(indice)-1);
+	indice++;
+	// I
+	remplit(clr[indice],min_x(indice)+3,max_x(indice)-3,min_y(indice)+3,max_y(indice)-1);
+	remplit(clr[indice],min_x(indice)+3,max_x(indice)-3,min_y(indice)+1,min_y(indice)+2);
+	indice++;
+	// Espace
 	indice++;
 	
-	// S, x de 82 à 98
-	remplit(clr[5],min_x(indice)+2,max_x(indice)-2,5,7);
-	remplit(clr[5],min_x(indice)+2,max_x(indice)-2,11,13);
-	remplit(clr[5],min_x(indice)+2,max_x(indice)-2,17,19);
-	remplit(clr[5],min_x(indice)+2,max_x(indice)-10,7,11);
-	remplit(clr[5],min_x(indice)+10,max_x(indice)-2,13,19);
+	// T
+	remplit(clr[indice],min_x(indice)+1, max_x(indice)-1, min_y(indice)+1, min_y(indice)+2);
+	remplit(clr[indice],min_x(indice)+3,max_x(indice)-3,min_y(indice)+2,max_y(indice)-1);
+	indice++;
+	// O
+	remplit(clr[indice],min_x(indice)+1,min_x(indice)+3,min_y(indice)+2,max_y(indice)-2);
+	remplit(clr[indice],max_x(indice)-3,max_x(indice)-1,min_y(indice)+2,max_y(indice)-2);
+	remplit(clr[indice],min_x(indice)+2,max_x(indice)-2,max_y(indice)-2,max_y(indice)-1);
+	remplit(clr[indice],min_x(indice)+2,max_x(indice)-2,min_y(indice)+1,min_y(indice)+2);
+	indice++;
+	// M
+	remplit(clr[indice],min_x(indice)+1,min_x(indice)+2,min_y(indice)+1,max_y(indice)-1);
+	remplit(clr[indice],max_x(indice)-2,max_x(indice)-1,min_y(indice)+1,max_y(indice)-1);
+	remplit(clr[indice],min_x(indice)+2,min_x(indice)+3,min_y(indice)+2,min_y(indice)+3);
+	remplit(clr[indice],min_x(indice)+3,min_x(indice)+4,min_y(indice)+3,min_y(indice)+4);
+	remplit(clr[indice],max_x(indice)-3,max_x(indice)-2,min_y(indice)+2,min_y(indice)+3);
+	remplit(clr[indice],max_x(indice)-4,max_x(indice)-3,min_y(indice)+3,min_y(indice)+4);
+	indice++;
+	// B
+	remplit(clr[indice],min_x(indice)+1,min_x(indice)+3,min_y(indice)+1,max_y(indice)-1);
+	remplit(clr[indice],max_x(indice)-3,max_x(indice)-1,min_y(indice)+2,min_y(indice)+4);
+	remplit(clr[indice],max_x(indice)-3,max_x(indice)-1,max_y(indice)-4,max_y(indice)-2);
+	remplit(clr[indice],min_x(indice)+1,max_x(indice)-2,min_y(indice)+1,min_y(indice)+2);
+	remplit(clr[indice],min_x(indice)+1,max_x(indice)-2,min_y(indice)+4,max_y(indice)-4);
+	remplit(clr[indice],min_x(indice)+1,max_x(indice)-2,max_y(indice)-2,max_y(indice)-1);
+	indice++;
+	// E
+	remplit(clr[indice],min_x(indice)+1, min_x(indice)+3, min_y(indice)+1, max_y(indice)-1);
+	remplit(clr[indice],min_x(indice)+1,max_x(indice)-1,min_y(indice)+1,min_y(indice)+2);
+	remplit(clr[indice],min_x(indice)+1,max_x(indice)-1,min_y(indice)+4,max_y(indice)-4);
+	remplit(clr[indice],min_x(indice)+1,max_x(indice)-1,max_y(indice)-2,max_y(indice)-1);
+	indice++;
+	// N
+	remplit(clr[indice],min_x(indice)+1,min_x(indice)+2,min_y(indice)+1,max_y(indice)-1);
+	remplit(clr[indice],max_x(indice)-2,max_x(indice)-1,min_y(indice)+1,max_y(indice)-1);
+	remplit(clr[indice],min_x(indice)+2,min_x(indice)+3,min_y(indice)+2,min_y(indice)+3);
+	remplit(clr[indice],min_x(indice)+3,min_x(indice)+4,min_y(indice)+3,min_y(indice)+4);
+	remplit(clr[indice],min_x(indice)+4,min_x(indice)+5,min_y(indice)+4,min_y(indice)+5);
+	remplit(clr[indice],min_x(indice)+5,min_x(indice)+6,min_y(indice)+5,min_y(indice)+6);
+	indice++;
+	// T
+	remplit(clr[indice],min_x(indice)+1, max_x(indice)-1, min_y(indice)+1, min_y(indice)+2);
+	remplit(clr[indice],min_x(indice)+3,max_x(indice)-3,min_y(indice)+2,max_y(indice)-1);
 	
 	refresh();
 	return;
 }
+
 void onclick(int selected, void* m){
 	menu* me = m;
 	me->buttons[selected].label="Entrer la commande !";
@@ -169,6 +279,7 @@ void onclick(int selected, void* m){
 
 	save_config(*bind);
 }
+
 /* Affiche les commandes du jeu, ne permet pas encore de les modifier */
 void affiche_commandes(keybind* bind){
 	menu m;
@@ -191,16 +302,19 @@ void affiche_commandes(keybind* bind){
 	return;
 }
 
-/* Affiche l'écran titre du jeu tant que l'utilisateur n'appuie pas sur entrée */		// TODO : affichage et modification des commandes
+/* Affiche l'écran titre du jeu tant que l'utilisateur n'appuie pas sur entrée ou sur espace */
 void ecran_titre(keybind* bindp){
 	bind=bindp;
 	int tick_count = 0;
-	int clr[6] = {(rand()%6) + 2,(rand()%6) + 2,(rand()%6) + 2,(rand()%6) + 2,(rand()%6) + 2,(rand()%6) + 2};
+	int clr[22];
+	for(int i = 0; i < 22; i++){
+		clr[i] = (rand() % 6) + 2;
+	}
 	char cmd = getch();
 	while((cmd != '\n') && (cmd != ' ')){
 		affiche_ecran_titre(clr);
 		usleep(16667);
-		if(tick_count == 20){
+		if(tick_count == 12){
 			change_couleur_lettre_titre(clr);
 			tick_count = 0;
 		}
