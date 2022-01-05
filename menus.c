@@ -9,7 +9,7 @@ typedef struct {
     int x;
     int y;
     int id;
-    void (*onclick)(int, menu*);
+    void (*onclick)(int, void*);
 } button;
 typedef struct{
     int nbr;
@@ -21,7 +21,7 @@ typedef struct{
 } menu;
 void menuloop(menu m);
 keybind * bind;
-void addbutton(menu* m, int x, int y, char* label, void (*onclick)(int, menu*)){
+void addbutton(menu* m, int x, int y, char* label, void (*onclick)(int, void*)){
 	m->nbr++;
 	button b;
 	b.x = x;
@@ -65,6 +65,7 @@ void menuloop(menu m){
         }
         else if(input == '\n'){
             (m.buttons[m.selected].onclick(m.selected, &m));
+			display(m);
         }
 		
 		usleep(16667);
@@ -152,14 +153,17 @@ void affiche_ecran_titre(int clr[6]){
 	refresh();
 	return;
 }
-void onclick(int selected, menu* m){
+void onclick(int selected, void* m){
+	menu* me = m;
+	me->buttons[selected].label="Entrer la commande !";
+	display(*me);
 	switch(selected){
-		case 0: bind->tourne_direct = getchar(); break;
-		case 1: bind->tourne_indirect = getchar(); break;
-		case 2: bind->gauche = getchar(); break;
-		case 3: bind->droite = getchar(); break;
-		case 4: bind->descente_rapide = getchar(); break;
-		case 5: bind->descente_instantanee = getchar(); break;
+		case 0: bind->tourne_direct = getchar(); me->buttons[selected].label="Rotation anti-horraire"; break;
+		case 1: bind->tourne_indirect = getchar(); me->buttons[selected].label="Rotation horraire"; break;
+		case 2: bind->gauche = getchar(); me->buttons[selected].label="Translation gauche"; break;
+		case 3: bind->droite = getchar(); me->buttons[selected].label="Translation droite"; break;
+		case 4: bind->descente_rapide = getchar(); me->buttons[selected].label="Descente rapide"; break;
+		case 5: bind->descente_instantanee = getchar(); me->buttons[selected].label="Descente directe"; break;
 		case 6: bind->reserve = getchar(); break;
 	}
 
