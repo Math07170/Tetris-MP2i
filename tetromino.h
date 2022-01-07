@@ -9,7 +9,7 @@ typedef struct {
     int spawn_y;
     int rotation_max;
     int rotations[4][4][4];
-    int id;		// Contient l'indice du tetromino dans le tableau des tetrominos, et non pas sa couleur !
+    int id;		// Contient l'indice du tetromino dans le tableau des tetrominos, et non pas la couleur de ses blocs
 } tetromino;
 
 void init_tetrominos();

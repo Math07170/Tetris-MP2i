@@ -3,15 +3,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "tetromino.h"
-/* Permet d'attendre un temps donné mais ne fonctionne pas */
-/* void wait(double towait){
-    time_t end = time(NULL) + towait;
-    time_t current = time(NULL);
-    while(difftime(end,current) >= 0.0){
-        usleep( (difftime(end, current) * (5.0 / 100.0))/(1000000) );
-        current = time(NULL);
-	}
-}*/
 
 void save_config(keybind tosave){
 	FILE* file;
@@ -104,7 +95,7 @@ void augmente_score(gamestate* p_state, int nbligne){
 }
 
 /* Fixe le tetromino courant et fait apparaître le suivant, tout en nettoyant les lignes pleines et en mettant à jour le score, le niveau et le nombre de lignes */
-void suivant(gamestate* p_state,int grille[20][10]){		// Nom de la fonction à changer ?
+void suivant(gamestate* p_state,int grille[20][10]){
 	fixe_tetromino(*p_state, grille);
 	int nbligne = nettoie_lignes(grille);
 	augmente_score(p_state,nbligne);

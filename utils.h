@@ -30,7 +30,6 @@ typedef struct {
     int niveau;
 } gamestate;
 
-//void wait(double time);	?
 void save_config(keybind tosave);
 keybind load_config();
 void init_gamestate(gamestate* p_state);

@@ -19,10 +19,11 @@ void init_ncurses(){
 	init_pair(6,COLOR_WHITE,COLOR_MAGENTA);	// Couleur des blocs T
 	init_pair(7,COLOR_WHITE,COLOR_CYAN);	// Couleur des blocs I
 	init_pair(8,COLOR_WHITE,COLOR_BLACK);	// Couleur des contours (équivaut à pas de couleur du tout...)
-	init_pair(9,COLOR_GREEN,COLOR_BLACK);	// Couleur pour l'affichage des commandes dans les menus, POTENTIELLEMENT TEMPORAIRE
+	init_pair(9,COLOR_GREEN,COLOR_BLACK);	// Couleur pour l'affichage des commandes dans les menus
 }
 
-/* Vérifie qu'une case fait partie de la grille et est disponible (qu'elle contient la valeur 0) */
+/* Vérifie qu'une case fait partie de la grille et est disponible (càd qu'elle contient la valeur 0)
+ * 0 <= i <= 20 ; 0 <= j <= 20 */
 bool case_disponible(int grille[20][10], int i, int j){
 	if(i<0 || i>=20 || j>=10 || j < 0) return false;
 	else if (grille[i][j] == 0) return true;
@@ -49,7 +50,8 @@ void cadre(int xmin, int xmax, int ymin, int ymax){
 	return;
 }
 
-/* "Remplit" un espace de 4x4 blocs, repéré par les coordonnées de son angle supérieur gauche, avec les blocs d'un tableau source */
+/* "Remplit" un espace de 4x4 blocs, repéré par les coordonnées de son angle supérieur gauche, avec les blocs d'un tableau source
+ * xmin et ymin doivent être positifs, le tableau source doit contenir des entiers entre 0 (bloc vide) et 7 */
 void remplit_cadre(int xmin, int ymin, int source[4][4]){
 	for(int i = 0; i < 4; i++){
 		for(int j = 0; j < 4; j ++){
@@ -64,7 +66,7 @@ void remplit_cadre(int xmin, int ymin, int source[4][4]){
 	}
 }
 
-/* Écrit les n chiffres le plus à droite de l'entier source, en commençant à la x iéme case de la ligne y
+/* Écrit les n chiffres le plus à droite de l'entier source, en commençant à la x ième case de la ligne y
  * Tous les arguments doivent être positifs */
 void affiche_nombre(int n, int source, int y, int x){
 	for(int i = n; i > 0; i--){
@@ -74,7 +76,8 @@ void affiche_nombre(int n, int source, int y, int x){
 	return;
 }
 
-/* Affiche la grille de jeu, à deux colonnes du bord gauche et une ligne du bord supérieur du terminal */
+/* Affiche la grille de jeu, à deux colonnes du bord gauche et une ligne du bord supérieur du terminal
+ * La grille de jeu doit contenir des entiers entre 0 (bloc vide) et 7 */
 void affiche_grille(int grille[20][10],gamestate state){
 	erase();
 	
@@ -105,17 +108,17 @@ void affiche_grille(int grille[20][10],gamestate state){
 		mvprintw(1,39,"Réserve");
 		remplit_cadre(2,38,tetrominos[state.reserve].rotations[0]);
 	}
-	{		// Emplacement du score, vide pour l'instant
+	{		// Emplacement du score
 		cadre(38,47,10,12);
 		mvprintw(9,39,"Score");
 		affiche_nombre(6,state.score,11,39);
 	}
-	{		// Emplacement du niveau, vide pour l'instant
+	{		// Emplacement du niveau
 		cadre(38,47,15,17);
 		mvprintw(14,39,"Niveau");
 		affiche_nombre(2,state.niveau,16,39);
 	}
-	{		// Emplacement du nombre de lignes, vide pour l'instant
+	{		// Emplacement du nombre de lignes
 		cadre(38,47,20,22);
 		mvprintw(19,39,"Lignes");
 		affiche_nombre(3,state.compte_ligne,21,39);
@@ -125,7 +128,7 @@ void affiche_grille(int grille[20][10],gamestate state){
 	return;
 }
 
-/* Vide le tableau grille (la remplit de zéros) */
+/* Vide le tableau grille (le remplit de zéros), peu importe ce qu'il contenait auparavant */
 void initialise_grille(int grille[20][10]){
 	for(int i = 0; i < 20; i++){
 		for(int j = 0; j < 10; j ++){

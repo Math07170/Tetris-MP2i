@@ -381,6 +381,7 @@ void tourne_indirect(gamestate* p_state, int grille[20][10]){
  * Renvoie 0 si le tetromino a pu apparaître et 2 sinon (partie perdue) */
 int nouveau_tetromino(gamestate* p_state, int grille[20][10]){
 	gamestate temp = *p_state;
+	
 	temp.block = temp.suivants[0];
 	temp.suivants[0] = temp.suivants[1];
 	temp.suivants[1] = temp.suivants[2];
