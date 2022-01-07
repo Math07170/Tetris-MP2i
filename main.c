@@ -36,8 +36,8 @@ void tick(){
     while(state.statut == 0){
 		interroge_commandes(&state,grille);
 		affiche_grille(grille,state);
-		if(tick_count == state.game_speed || state.descente_rapide){
-			tick_count = tick_count%state.game_speed;
+		if(tick_count >= state.game_speed || state.descente_rapide){
+			tick_count = 0;
 			if(descente_possible(&state,grille)){
 				descend(&state, grille);
 			}else{
