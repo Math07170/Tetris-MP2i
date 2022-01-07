@@ -3,79 +3,10 @@
 #include <stdlib.h>
 #include "grille.h"
 #include "utils.h"
+#include "menu_gestion.h"
 
-typedef struct {
-    char* label;
-    int x;
-    int y;
-    int id;
-    void (*onclick)(int, void*);
-} button;
-
-typedef struct{
-    int nbr;
-    char* title;
-    int x;
-    int y;
-    button* buttons;
-    int selected;
-} menu;
-
-void menuloop(menu m);
 keybind * bind;
 
-void addbutton(menu* m, int x, int y, char* label, void (*onclick)(int, void*)){
-	m->nbr++;
-	button b;
-	b.x = x;
-	b.y = y;
-	b.label = label;
-	b.onclick = onclick;
-	b.id = m->nbr-1;
-	m->buttons[m->nbr-1] = b;
-}
-
-void display(menu m){
-    erase();
-	attroff(COLOR_PAIR(1));
-    attron(A_BOLD);
-	mvprintw(m.x,m.y,m.title);
-	attroff(A_BOLD);
-    for(int i = 0; i<m.nbr; i++){
-        button b = m.buttons[i];
-		attroff(COLOR_PAIR(9));
-        if(m.selected == b.id){
-            attron(COLOR_PAIR(9));
-        }
-        mvprintw(b.x, b.y, b.label);
-    }
-    refresh();
-	
-}
-
-void menuloop(menu m){
-    int running = 1;
-    while(running == 1){
-        char input = getch();
-		if(input == ' '){
-			running = 0;
-		}
-        else if(input == 'z'){
-            if(m.selected > 0) m.selected --;
-			display(m);
-        }
-        else if(input == 's'){
-            if(m.selected < m.nbr-1) m.selected ++;
-			display(m);
-        }
-        else if(input == '\n'){
-            (m.buttons[m.selected].onclick(m.selected, &m));
-			display(m);
-        }
-		
-		usleep(16667);
-    }
-}
 
 /* Les quatre fonctions suivantes renvoient les coordonnées maximum et minimum du rectangle qui accueillira la lettre d'indice indice
  * x représente l'indice de la colonne et y celui de la ligne
