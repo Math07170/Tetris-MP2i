@@ -8,9 +8,9 @@
 keybind * bind;
 
 
-/* Les quatre fonctions suivantes renvoient les coordonnées maximum et minimum du rectangle qui accueillira la lettre d'indice indice
+/* Les quatre fonctions suivantes renvoient les coordonnées maximum et minimum du rectangle qui accueillira la indice-ième lettre du menu
  * x représente l'indice de la colonne et y celui de la ligne
- * L'entier indice doit être positif */
+ * L'entier indice doit être compris entre 0 et 21 */
 int min_x(int indice){
 	return 2 + 8 * (indice % 11);
 }
@@ -221,8 +221,8 @@ void affiche_commandes(keybind* bind){
 	button buttons[20];
     m.buttons = buttons;
     m.selected=0;
-	addbutton(&m, 6, 17, "Rotation anti-horraire", onclick);
-	addbutton(&m, 8, 17, "Rotation horraire", onclick);
+	addbutton(&m, 6, 17, "Rotation anti-horaire", onclick);
+	addbutton(&m, 8, 17, "Rotation horaire", onclick);
 	addbutton(&m, 10, 17, "Translation gauche", onclick);
 	addbutton(&m, 12, 17, "Translation droite", onclick);
 	addbutton(&m, 14, 17, "Descente rapide", onclick);

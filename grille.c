@@ -67,7 +67,8 @@ void remplit_cadre(int xmin, int ymin, int source[4][4]){
 }
 
 /* Écrit les n chiffres le plus à droite de l'entier source, en commençant à la x ième case de la ligne y
- * Tous les arguments doivent être positifs */
+ * Tous les arguments doivent être positifs 
+ * Si le nombre à afficher est supérieur à 10^n, il ne sera pas affiché correctement */
 void affiche_nombre(int n, int source, int y, int x){
 	for(int i = n; i > 0; i--){
 		mvprintw(y,x+i,"%d",source % 10);
@@ -129,7 +130,7 @@ void affiche_grille(int grille[20][10],gamestate state){
 }
 
 /* Vide le tableau grille (le remplit de zéros), peu importe ce qu'il contenait auparavant */
-void initialise_grille(int grille[20][10]){
+void init_grille(int grille[20][10]){
 	for(int i = 0; i < 20; i++){
 		for(int j = 0; j < 10; j ++){
 			grille[i][j] = 0;

@@ -261,7 +261,7 @@ void efface(int grille[20][10], int i, int j){
 void efface_tetromino(int grille[20][10], gamestate* p_state){
 	for(int i = 3; i >= 0; i--){
 		for(int j = 3; j >= 0; j--){
-            if(tetrominos[p_state -> block].rotations[p_state->rotation_index][i][j] != 0){
+            if(tetrominos[p_state -> indice_tetromino].rotations[p_state->indice_rotations][i][j] != 0){
 				efface(grille, p_state -> y+i, p_state -> x+j);
             }
 		}
@@ -277,8 +277,8 @@ void dessine(int grille[20][10], int i, int j, int bloc){
 void dessine_tetromino(int grille[20][10], gamestate* p_state){
 	for(int i = 3; i >= 0; i--){
 		for(int j = 3; j >= 0; j--){
-            if(tetrominos[p_state->block].rotations[p_state->rotation_index][i][j] != 0){				
-				dessine(grille, p_state->y+i, p_state->x+j, tetrominos[p_state->block].rotations[p_state->rotation_index][i][j]);
+            if(tetrominos[p_state->indice_tetromino].rotations[p_state->indice_rotations][i][j] != 0){				
+				dessine(grille, p_state->y+i, p_state->x+j, tetrominos[p_state->indice_tetromino].rotations[p_state->indice_rotations][i][j]);
             }
 		}
 	}
@@ -288,7 +288,7 @@ void dessine_tetromino(int grille[20][10], gamestate* p_state){
 bool mouvement_valide(int grille[20][10], gamestate state){
 	for(int i = 3; i >= 0; i--){
 		for(int j = 3; j >= 0; j--){
-            if(tetrominos[state.block].rotations[state.rotation_index][i][j] != 0){				
+            if(tetrominos[state.indice_tetromino].rotations[state.indice_rotations][i][j] != 0){				
 				if(case_disponible(grille, state.y+i, state.x+j) == true){
 					continue;
 				}
@@ -357,7 +357,7 @@ void deplace_gauche(gamestate* p_state, int grille[20][10]){
 /* Tourne le tetromino dans le sens direct (touche l) */
 void tourne_direct(gamestate* p_state, int grille[20][10]){
 	gamestate temp = *p_state;
-	temp.rotation_index = (temp.rotation_index + 3)%(tetrominos[temp.block].rotation_max + 1);
+	temp.indice_rotations = (temp.indice_rotations + 3)%(tetrominos[temp.indice_tetromino].rotation_max + 1);
 		efface_tetromino(grille, p_state);
 	if(mouvement_valide(grille, temp)){
 		*p_state = temp;		
@@ -368,7 +368,7 @@ void tourne_direct(gamestate* p_state, int grille[20][10]){
 /* Tourne le tetromino dans le sens indirect (touche p) */
 void tourne_indirect(gamestate* p_state, int grille[20][10]){
 	gamestate temp = *p_state;
-	temp.rotation_index = (temp.rotation_index + 1)%(tetrominos[temp.block].rotation_max + 1);
+	temp.indice_rotations = (temp.indice_rotations + 1)%(tetrominos[temp.indice_tetromino].rotation_max + 1);
 		efface_tetromino(grille, p_state);
 	if(mouvement_valide(grille, temp)){
 		*p_state = temp;		
@@ -382,14 +382,14 @@ void tourne_indirect(gamestate* p_state, int grille[20][10]){
 int nouveau_tetromino(gamestate* p_state, int grille[20][10]){
 	gamestate temp = *p_state;
 	
-	temp.block = temp.suivants[0];
+	temp.indice_tetromino = temp.suivants[0];
 	temp.suivants[0] = temp.suivants[1];
 	temp.suivants[1] = temp.suivants[2];
 	temp.suivants[2] = temp.suivants[3];
 	temp.suivants[3] = (rand() % 7);
-	temp.rotation_index = 0;
-	temp.x = tetrominos[temp.block].spawn_x;
-	temp.y = tetrominos[temp.block].spawn_y;
+	temp.indice_rotations = 0;
+	temp.x = tetrominos[temp.indice_tetromino].spawn_x;
+	temp.y = tetrominos[temp.indice_tetromino].spawn_y;
 	temp.reserve_utilisee = false;
 
 	if(mouvement_valide(grille, temp)){
@@ -409,12 +409,12 @@ int reserve(gamestate* p_state,int grille[20][10]){
 		gamestate temp = *p_state;
 		
 		efface_tetromino(grille,&temp);
-		int bloctmp = temp.block;
-		temp.block = temp.reserve;
-		temp.reserve = bloctmp;
-		temp.rotation_index = 0;
-		temp.x = tetrominos[temp.block].spawn_x;
-		temp.y = tetrominos[temp.block].spawn_y;
+		int indice_tetro_tmp = temp.indice_tetromino;
+		temp.indice_tetromino = temp.reserve;
+		temp.reserve = indice_tetro_tmp;
+		temp.indice_rotations = 0;
+		temp.x = tetrominos[temp.indice_tetromino].spawn_x;
+		temp.y = tetrominos[temp.indice_tetromino].spawn_y;
 		temp.reserve_utilisee = true;
 		
 		if(mouvement_valide(grille, temp)){
@@ -431,8 +431,8 @@ int reserve(gamestate* p_state,int grille[20][10]){
 void fixe_tetromino(gamestate state, int grille[20][10]){
 	for(int i = 0; i <= 3; i++){
 		for(int j = 0; j <= 3; j++){
-			if(tetrominos[state.block].rotations[state.rotation_index][i][j] != 0){
-				grille[state.y + i][state.x + j] = tetrominos[state.block].rotations[state.rotation_index][i][j];
+			if(tetrominos[state.indice_tetromino].rotations[state.indice_rotations][i][j] != 0){
+				grille[state.y + i][state.x + j] = tetrominos[state.indice_tetromino].rotations[state.indice_rotations][i][j];
 			}
 		}
 	}

@@ -36,11 +36,11 @@ keybind load_config(){
 }
 /* Initialise l'état du jeu aux valeurs qu'il doit avoir à chaque début de partie */
 void init_gamestate(gamestate* p_state){
-	p_state -> block = 0;
-	p_state -> rotation_index = 0;
+	p_state -> indice_tetromino = 0;
+	p_state -> indice_rotations = 0;
 	p_state -> x = 0;
 	p_state -> y = 0;
-	p_state -> game_speed = 48;
+	p_state -> vitesse_jeu = 48;
 	p_state -> reserve_utilisee = false;
 	p_state -> reserve = (rand() % 7);		// Temporairement, le tetromino dans la réserve est généré aléatoirement en début de partie
 	p_state -> suivants[0] = (rand() % 7);
@@ -60,22 +60,22 @@ void change_niveau(gamestate* p_state){
 	if(p_state -> niveau != niveau){
 					p_state -> niveau = p_state -> compte_ligne/10;
 					switch(niveau){
-						case 0 : p_state -> game_speed = 48; break;
-						case 1 : p_state -> game_speed = 43; break;
-						case 2 : p_state -> game_speed = 38; break;
-						case 3 : p_state -> game_speed = 33; break;
-						case 4 : p_state -> game_speed = 28; break;
-						case 5 : p_state -> game_speed = 23; break;
-						case 6 : p_state -> game_speed = 18; break;
-						case 7 : p_state -> game_speed = 13; break;
-						case 8 : p_state -> game_speed = 8;  break;
-						case 9 : p_state -> game_speed = 6;  break;
+						case 0 : p_state -> vitesse_jeu = 48; break;
+						case 1 : p_state -> vitesse_jeu = 43; break;
+						case 2 : p_state -> vitesse_jeu = 38; break;
+						case 3 : p_state -> vitesse_jeu = 33; break;
+						case 4 : p_state -> vitesse_jeu = 28; break;
+						case 5 : p_state -> vitesse_jeu = 23; break;
+						case 6 : p_state -> vitesse_jeu = 18; break;
+						case 7 : p_state -> vitesse_jeu = 13; break;
+						case 8 : p_state -> vitesse_jeu = 8;  break;
+						case 9 : p_state -> vitesse_jeu = 6;  break;
 						default:
-							if(niveau > 9 && niveau <=12) p_state -> game_speed = 5;
-							else if(niveau > 12 && niveau <=15) p_state -> game_speed = 4; 
-							else if(niveau > 15 && niveau <=18) p_state -> game_speed = 3; 
-							else if(niveau > 18 && niveau <=28) p_state -> game_speed = 2;
-							else p_state -> game_speed = 1;
+							if(niveau > 9 && niveau <=12) p_state -> vitesse_jeu = 5;
+							else if(niveau > 12 && niveau <=15) p_state -> vitesse_jeu = 4; 
+							else if(niveau > 15 && niveau <=18) p_state -> vitesse_jeu = 3; 
+							else if(niveau > 18 && niveau <=28) p_state -> vitesse_jeu = 2;
+							else p_state -> vitesse_jeu = 1;
 						break;
 					}
 				}

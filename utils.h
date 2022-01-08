@@ -15,11 +15,11 @@ typedef struct {
 } keybind;
 
 typedef struct {
-    int block;
-    int rotation_index;
+    int indice_tetromino;
+    int indice_rotations;
     int x;
     int y;
-    int game_speed;
+    int vitesse_jeu;
     bool reserve_utilisee;
     int reserve;
     int suivants[4];

@@ -27,47 +27,46 @@ void interroge_commandes(gamestate* p_state, int grille[20][10]){
 }
 
 
-/* Contient le "jeu" de Tetris en lui-même */
-void tick(){
+/* Contient la partie "jeu" du programme */
+void boucle_jeu(){
 	state.statut = nouveau_tetromino(&state, grille);
-	int tick_count = 0;
+	int compte_tick = 0;		// Variable servant à se repérer parmi les itérations de la boucle de jeu
 	bool avance_rapide = false;
     while(state.statut == 0){
 		interroge_commandes(&state,grille);
 		affiche_grille(grille,state);
-		if(tick_count >= state.game_speed || state.descente_rapide){		// L'utilisation de >= permet d'éviter que dans certains cas, tick_count devienne plus grand que game_speed, ce qui arrête la descente du tetromino
-			tick_count = 0;
+		if(compte_tick >= state.vitesse_jeu || state.descente_rapide){		// L'utilisation de >= permet d'éviter que dans certains cas, compte_tick devienne plus grand que vitesse_jeu, ce qui arrêterait la descente du tetromino
+			compte_tick = 0;
 			if(descente_possible(&state,grille)){
 				descend(&state, grille);
 			}else{
 				suivant(&state,grille);		// S'occupe de tous les changements nécessaires au passage au prochain tetromino
-				tick_count = 0;		// Permet que chaque nouveau tetromino aie le vrai délai de descente avant sa 1ère descente
+				compte_tick = 0;		// Permet que chaque nouveau tetromino aie le vrai délai de descente avant sa 1ère descente
 			}
 			state.descente_rapide = false;
 		}
 		usleep(16667);	// 60 Ticks par seconde
-		tick_count++;
+		compte_tick++;
 	}
 }
 
 int main() {
+	// Initialisations...
 	binding = load_config();
-
+	srand(time(0));
     init_ncurses();
-    srand(time(0));		// "Initialise l'aléatoire" de façon à avoir une suite de tetrominos différente à chaque exécution
+    init_tetrominos();
+    bool lance_partie = true;
     
-	ecran_titre(&binding);
-    
-	init_tetrominos();		// N'a pas besoin d'être initialisé à chaque partie, une initialisation au lancement du programme est suffisante
-	bool lance_partie = true;
+	ecran_titre(&binding);		// Écran titre et affichage des commandes
 	
-	while(lance_partie){
-		initialise_grille(grille);
+	while(lance_partie){		// La partie "jeu" se déroule ici
+		init_grille(grille);
 		init_gamestate(&state);
-		tick();
-		lance_partie = fin_partie(state);
+		boucle_jeu();
+		lance_partie = fin_partie(state);		// Affiche l'écran de fin et permet éventuellement au joueur de lancer une nouvelle partie
 	}
 	
-	endwin();
+	endwin();		// Arrête "proprement" ncurses avant de fermer le jeu
 	return 0;
 }
