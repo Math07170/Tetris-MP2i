@@ -237,7 +237,7 @@ void onclick(int selected, void* m){
 
 /* Affiche les commandes du jeu, ne permet pas encore de les modifier */
 void affiche_commandes(keybind* bind){
-	menu m = createMenu("COMMANDES", 7, 4, 18);
+	menu m = createMenu("COMMANDES", 7, 3, 4, 18);
 	char label[40] = "Rotation anti-horaire : ";
 	addbutton(&m, 6, 17, strncat(label, &bind->tourne_direct, 1), onclick);
 	char label1[40] = "Rotation horaire : ";
@@ -252,6 +252,7 @@ void affiche_commandes(keybind* bind){
 	addbutton(&m, 16, 17, strncat(label5, &bind->descente_instantanee, 1), onclick);
 	char label6[40] = "Reserve : ";
 	addbutton(&m, 18, 17, strncat(label6, &bind->reserve, 1), onclick);
+	addTextbox(&m, 20, 17, "Les commandes sont Z S Espace et Entrer");
 	display(m);
 	menuloop(m);
 	return;

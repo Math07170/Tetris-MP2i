@@ -5,18 +5,38 @@
 #include "string.h"
 #include "menu_gestion.h"
 
-menu createMenu(char* title, int nb_button, int x, int y){
+menu createMenu(char* title, int nb_button, int nb_textbox, int x, int y){
     menu m;
     m.nbr = 0;
     m.nbr_max = nb_button;
+    m.nbr_text = 0;
+    m.nbr_max_text = nb_textbox;
     m.title = malloc(sizeof(char) * strlen(title) + 1);
     strcpy(m.title, title);
     m.x = x;
     m.y = y;
     button* buttons = malloc(nb_button * sizeof(button));
+    textbox* texts = malloc(nb_textbox * sizeof(textbox));
+    m.texts = texts;
     m.buttons = buttons;
     m.selected = 0;
     return(m);
+}
+void addTextbox(menu* m, int x, int y, char* text){
+    m->nbr_text = (m->nbr_text)+1;
+    if(m->nbr_text > m->nbr_max_text) {
+        endwin();
+        printf("Erreur le menu est trop petit !");
+        exit(666);
+    }
+    
+	textbox t;
+	t.x = x;
+	t.y = y;
+	t.text = malloc(sizeof(char)* strlen(text)+1);
+    strcpy(t.text, text);
+	t.id = m->nbr_text-1;
+	m->texts[m->nbr_text-1] = t;
 }
 void addbutton(menu* m, int x, int y, char* label, void (*onclick)(int, void*)){
 	m->nbr = (m->nbr)+1;
@@ -29,7 +49,7 @@ void addbutton(menu* m, int x, int y, char* label, void (*onclick)(int, void*)){
 	button b;
 	b.x = x;
 	b.y = y;
-	b.label = malloc(sizeof(char)* 40);
+	b.label = malloc(sizeof(char)* strlen(label) + 1);
     strcpy(b.label, label);
 	b.onclick = onclick;
 	b.id = m->nbr-1;
@@ -48,6 +68,10 @@ void display(menu m){
     attron(A_BOLD);
 	mvprintw(m.x,m.y,m.title);
 	attroff(A_BOLD);
+    for(int i = 0; i<m.nbr_text; i++){
+        textbox t = m.texts[i];
+        mvprintw(t.x, t.y, t.text);
+    }
     for(int i = 0; i<m.nbr; i++){
         button b = m.buttons[i];
 		attroff(COLOR_PAIR(9));
@@ -85,6 +109,10 @@ void menuloop(menu m){
     for(int i = 0; i<m.nbr; i++){
         free(m.buttons[i].label);
     }
+    for(int i = 0; i<m.nbr_text; i++){
+        free(m.texts[i].text);
+    }
+    free(m.texts);
     free(m.buttons);
     free(m.title);
 }
