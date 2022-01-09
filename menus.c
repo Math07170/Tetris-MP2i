@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include "grille.h"
 #include "utils.h"
+#include "string.h"
 #include "menu_gestion.h"
 
 keybind * bind;
@@ -196,38 +197,61 @@ void affiche_ecran_titre(int clr[22]){
 
 void onclick(int selected, void* m){
 	menu* me = m;
-	me->buttons[selected].label="Entrer la commande !";
+	setlabel(&(me->buttons[selected]), "Entrer la commande !");
 	display(*me);
+	char label[80];
 	switch(selected){
-		case 0: bind->tourne_direct = getchar(); me->buttons[selected].label="Rotation anti-horraire"; break;
-		case 1: bind->tourne_indirect = getchar(); me->buttons[selected].label="Rotation horraire"; break;
-		case 2: bind->gauche = getchar(); me->buttons[selected].label="Translation gauche"; break;
-		case 3: bind->droite = getchar(); me->buttons[selected].label="Translation droite"; break;
-		case 4: bind->descente_rapide = getchar(); me->buttons[selected].label="Descente rapide"; break;
-		case 5: bind->descente_instantanee = getchar(); me->buttons[selected].label="Descente directe"; break;
-		case 6: bind->reserve = getchar(); break;
+		case 0: bind->tourne_direct = getchar(); 
+			strcpy(label, "Rotation anti-horraire : "); 
+			strncat(label, &bind->tourne_direct, 1);
+			break;
+		case 1: bind->tourne_indirect = getchar();
+			strcpy(label, "Rotation horraire : "); 
+			strncat(label, &bind->tourne_indirect, 1);
+			break;
+		case 2: bind->gauche = getchar();
+			strcpy(label, "Translation gauche : "); 
+			strncat(label, &bind->gauche, 1);
+			break;
+		case 3: bind->droite = getchar(); 
+			strcpy(label, "Translation droite : "); 
+			strncat(label, &bind->droite, 1);
+			break;
+		case 4: bind->descente_rapide = getchar(); 
+			strcpy(label, "Descente rapide : "); 
+			strncat(label, &bind->descente_rapide, 1);
+			break;
+		case 5: bind->descente_instantanee = getchar();
+			strcpy(label, "Descente directe : "); 
+			strncat(label, &bind->descente_instantanee, 1);
+			break;
+		case 6: bind->reserve = getchar();
+			strcpy(label, "Reserve : "); 
+			strncat(label, &bind->reserve, 1);
+			break;
+		
 	}
-
+	setlabel(&(me->buttons[selected]), label);
 	save_config(*bind);
 }
 
 /* Affiche les commandes du jeu, ne permet pas encore de les modifier */
 void affiche_commandes(keybind* bind){
-	menu m;
-	m.nbr=0;
-    m.title = "COMMANDES";
-    m.x = 4;
-    m.y = 18;
-	button buttons[20];
-    m.buttons = buttons;
-    m.selected=0;
-	addbutton(&m, 6, 17, "Rotation anti-horaire", onclick);
-	addbutton(&m, 8, 17, "Rotation horaire", onclick);
-	addbutton(&m, 10, 17, "Translation gauche", onclick);
-	addbutton(&m, 12, 17, "Translation droite", onclick);
-	addbutton(&m, 14, 17, "Descente rapide", onclick);
-	addbutton(&m, 16, 17, "Descente directe", onclick);
-	addbutton(&m, 18, 17, "Reserve", onclick);
+	menu m = createMenu("COMMANDES", 7, 4, 18);
+	char label[40] = "Rotation anti-horaire : ";
+	addbutton(&m, 6, 17, strncat(label, &bind->tourne_direct, 1), onclick);
+	char label1[40] = "Rotation horaire : ";
+	addbutton(&m, 8, 17, strncat(label1, &bind->tourne_indirect, 1), onclick);
+	char label2[40] = "Translation gauche : ";
+	addbutton(&m, 10, 17, strncat(label2, &bind->gauche, 1), onclick);
+	char label3[40] = "Translation droite : ";
+	addbutton(&m, 12, 17, strncat(label3, &bind->droite, 1), onclick);
+	char label4[40] = "Descente rapide : ";
+	addbutton(&m, 14, 17, strncat(label4, &bind->descente_rapide, 1), onclick);
+	char label5[40] = "Descente directe : ";
+	addbutton(&m, 16, 17, strncat(label5, &bind->descente_instantanee, 1), onclick);
+	char label6[40] = "Reserve : ";
+	addbutton(&m, 18, 17, strncat(label6, &bind->reserve, 1), onclick);
 	display(m);
 	menuloop(m);
 	return;

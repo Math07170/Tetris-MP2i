@@ -13,6 +13,7 @@ typedef struct {
 
 typedef struct{
     int nbr;
+    int nbr_max;
     char* title;
     int x;
     int y;
@@ -23,5 +24,6 @@ typedef struct{
 void menuloop(menu m);
 void display(menu m);
 void addbutton(menu* m, int x, int y, char* label, void (*onclick)(int, void*));
-
+void setlabel(button* b, char* label);
+menu createMenu(char* title, int nb_button, int x, int y);
 #endif
