@@ -237,7 +237,7 @@ void onclick(int selected, void* m){
 
 /* Affiche les commandes du jeu, ne permet pas encore de les modifier */
 void affiche_commandes(keybind* bind){
-	menu m = createMenu("COMMANDES", 7, 3, 4, 18);
+	menu m = createMenu("COMMANDES", 7, 3, 4, 18); 
 	char label[40] = "Rotation anti-horaire : ";
 	addbutton(&m, 6, 17, strncat(label, &bind->tourne_direct, 1), onclick);
 	char label1[40] = "Rotation horaire : ";

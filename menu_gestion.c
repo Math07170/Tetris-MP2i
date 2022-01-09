@@ -5,6 +5,8 @@
 #include "string.h"
 #include "menu_gestion.h"
 
+
+/* Crée un menu prend en argument sont titre, son nombre max de boutton de textbox et les coordonnée en x y du titre */
 menu createMenu(char* title, int nb_button, int nb_textbox, int x, int y){
     menu m;
     m.nbr = 0;
