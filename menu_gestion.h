@@ -3,6 +3,7 @@
 
 #include <stdbool.h>
 
+//Structure boutton contient les informations relative au boutton
 typedef struct {
     char* label;
     int x;
@@ -10,23 +11,28 @@ typedef struct {
     int id;
     void (*onclick)(int, void*);
 } button;
+
+//Structure textbox contient les infos relative à une zone de texte
 typedef struct {
     char* text;
     int x;
     int y;
     int id;
 }textbox; 
+
+
+//Structure menu contient toutes les infos du menu
 typedef struct{
-    int nbr;
-    int nbr_text;
-    int nbr_max;
-    int nbr_max_text;
-    char* title;
-    int x;
-    int y;
-    button* buttons;
-    textbox* texts;
-    int selected;
+    int nbr; // nombre de boutton du menu
+    int nbr_text; // nombre de textbox du menu
+    int nbr_max; // nombre de boutton max du menu
+    int nbr_max_text; // nombre de textbox max du menu
+    char* title; // titre du menu
+    int x; // emplacement en x du titre
+    int y; // emplacement en y du titre
+    button* buttons; // tableau contenant l'intégralité des bouttons
+    textbox* texts; // tableau contenantt l'intégralité des textbox
+    int selected; // indice du boutton actuellement séléctionné
 } menu;
 
 void menuloop(menu m);

@@ -24,6 +24,7 @@ menu createMenu(char* title, int nb_button, int nb_textbox, int x, int y){
     m.selected = 0;
     return(m);
 }
+//Crée une nouvelle textbox 
 void addTextbox(menu* m, int x, int y, char* text){
     m->nbr_text = (m->nbr_text)+1;
     if(m->nbr_text > m->nbr_max_text) {
@@ -40,6 +41,13 @@ void addTextbox(menu* m, int x, int y, char* text){
 	t.id = m->nbr_text-1;
 	m->texts[m->nbr_text-1] = t;
 }
+
+/* 
+Crée un nouveau boutton dans le menu
+x et y sont des entiers positifs
+label est un "string"
+onclick est une fonction 
+*/
 void addbutton(menu* m, int x, int y, char* label, void (*onclick)(int, void*)){
 	m->nbr = (m->nbr)+1;
     if(m->nbr > m->nbr_max) {
@@ -57,6 +65,7 @@ void addbutton(menu* m, int x, int y, char* label, void (*onclick)(int, void*)){
 	b.id = m->nbr-1;
 	m->buttons[m->nbr-1] = b;
 }
+// Change le label d'un boutton gestion de la mémoire dynamique
 void setlabel(button* b, char* label){
     char* old = b->label;
     char* new_label = malloc(sizeof(char) * strlen(label) +1);
@@ -64,6 +73,8 @@ void setlabel(button* b, char* label){
     b->label = new_label;
     free(old);
 }
+// Affiche le menu pris en argument
+// Nécessite l'initialisation préalable de NCURSES
 void display(menu m){
     erase();
 	attroff(COLOR_PAIR(1));
@@ -85,12 +96,17 @@ void display(menu m){
     refresh();
 	
 }
-
+/* 
+Boucle du menu éxécutée 60 fois par seconde
+On vérifie les entrée clavier et on réaffiche le menu si des changement ont été effectué
+Libère la mémoire réservée à quand le menu est fermé 
+*/
 void menuloop(menu m){
     int running = 1;
     while(running == 1){
         char input = getch();
 		if(input == ' '){
+            //On sort alors du menu
 			running = 0;
 		}
         else if(input == 'z'){
@@ -102,12 +118,16 @@ void menuloop(menu m){
 			display(m);
         }
         else if(input == '\n'){
+            //Si le boutton est cliké la fonction associé est appelé
+            //La fonction reçois l'id du boutton séléctionner et un pointeur vers le menu
+            //Cela permet d'avoir le contexte du boutton
             (m.buttons[m.selected].onclick(m.selected, &m));
 			display(m);
         }
 		
 		usleep(16667);
     }
+    /* Libération de la mémoire réservée */
     for(int i = 0; i<m.nbr; i++){
         free(m.buttons[i].label);
     }

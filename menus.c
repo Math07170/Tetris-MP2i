@@ -252,7 +252,7 @@ void affiche_commandes(keybind* bind){
 	addbutton(&m, 16, 17, strncat(label5, &bind->descente_instantanee, 1), onclick);
 	char label6[40] = "Reserve : ";
 	addbutton(&m, 18, 17, strncat(label6, &bind->reserve, 1), onclick);
-	addTextbox(&m, 20, 17, "Les commandes sont Z S Espace et Entrer");
+	addTextbox(&m, 20, 17, "Les commandes du menu sont Z, S Espace et Entrer");
 	display(m);
 	menuloop(m);
 	return;
