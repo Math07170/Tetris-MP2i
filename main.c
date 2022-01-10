@@ -13,7 +13,7 @@ int grille[20][10];
 gamestate state;
 keybind binding;
 
-/* Agit sur le tetromino en cours de chute, selon l'entrée clavier */		// À déplacer...
+/* Agit sur le tetromino en cours de chute, selon l'entrée clavier */
 void interroge_commandes(gamestate* p_state, int grille[20][10]){
 	char cmd = getch();
 	if(cmd == binding.droite) deplace_droite(p_state, grille);

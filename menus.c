@@ -237,22 +237,23 @@ void onclick(int selected, void* m){
 
 /* Affiche les commandes du jeu, ne permet pas encore de les modifier */
 void affiche_commandes(keybind* bind){
-	menu m = createMenu("COMMANDES", 7, 3, 4, 18); 
+	menu m = createMenu("COMMANDES", 7, 3, 2, 24); 
 	char label[40] = "Rotation anti-horaire : ";
-	addbutton(&m, 6, 17, strncat(label, &bind->tourne_direct, 1), onclick);
+	addbutton(&m, 4, 17, strncat(label, &bind->tourne_direct, 1), onclick);
 	char label1[40] = "Rotation horaire : ";
-	addbutton(&m, 8, 17, strncat(label1, &bind->tourne_indirect, 1), onclick);
+	addbutton(&m, 6, 17, strncat(label1, &bind->tourne_indirect, 1), onclick);
 	char label2[40] = "Translation gauche : ";
-	addbutton(&m, 10, 17, strncat(label2, &bind->gauche, 1), onclick);
+	addbutton(&m, 8, 17, strncat(label2, &bind->gauche, 1), onclick);
 	char label3[40] = "Translation droite : ";
-	addbutton(&m, 12, 17, strncat(label3, &bind->droite, 1), onclick);
+	addbutton(&m, 10, 17, strncat(label3, &bind->droite, 1), onclick);
 	char label4[40] = "Descente rapide : ";
-	addbutton(&m, 14, 17, strncat(label4, &bind->descente_rapide, 1), onclick);
+	addbutton(&m, 12, 17, strncat(label4, &bind->descente_rapide, 1), onclick);
 	char label5[40] = "Descente directe : ";
-	addbutton(&m, 16, 17, strncat(label5, &bind->descente_instantanee, 1), onclick);
+	addbutton(&m, 14, 17, strncat(label5, &bind->descente_instantanee, 1), onclick);
 	char label6[40] = "Reserve : ";
-	addbutton(&m, 18, 17, strncat(label6, &bind->reserve, 1), onclick);
-	addTextbox(&m, 20, 17, "Les commandes du menu sont Z, S Espace et Entrer");
+	addbutton(&m, 16, 17, strncat(label6, &bind->reserve, 1), onclick);
+	addTextbox(&m, 21, 17, "Entrée : Choisir la commande à changer");
+	addTextbox(&m, 23, 17, "Z : Haut     S : Bas     Espace : Lancer le jeu");
 	display(m);
 	menuloop(m);
 	return;
