@@ -202,7 +202,7 @@ void onclick(int selected, void* m){
 	char label[80];
 	switch(selected){
 		case 0: bind->tourne_direct = getchar(); 
-			strcpy(label, "Rotation anti-horraire : "); 
+			strcpy(label, "Rotation anti-horaire : "); 
 			strncat(label, &bind->tourne_direct, 1);
 			break;
 		case 1: bind->tourne_indirect = getchar();
@@ -235,7 +235,7 @@ void onclick(int selected, void* m){
 	save_config(*bind);
 }
 
-/* Affiche les commandes du jeu, ne permet pas encore de les modifier */
+/* Affiche les commandes du jeu, permet également de les modifier */
 void affiche_commandes(keybind* bind){
 	menu m = createMenu("COMMANDES", 7, 3, 2, 24); 
 	char label[40] = "Rotation anti-horaire : ";
