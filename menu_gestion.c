@@ -9,24 +9,32 @@
 /* Crée un menu prend en argument sont titre, son nombre max de boutton de textbox et les coordonnée en x y du titre */
 menu createMenu(char* title, int nb_button, int nb_textbox, int x, int y){
     menu m;
+    
     m.nbr = 0;
     m.nbr_max = nb_button;
     m.nbr_text = 0;
     m.nbr_max_text = nb_textbox;
+
     m.title = malloc(sizeof(char) * strlen(title) + 1);
     strcpy(m.title, title);
+
     m.x = x;
     m.y = y;
+
     button* buttons = malloc(nb_button * sizeof(button));
     textbox* texts = malloc(nb_textbox * sizeof(textbox));
+
     m.texts = texts;
     m.buttons = buttons;
     m.selected = 0;
+
     return(m);
 }
 //Crée une nouvelle textbox 
 void addTextbox(menu* m, int x, int y, char* text){
     m->nbr_text = (m->nbr_text)+1;
+
+    //Erreur en cas de dépassement de tableau
     if(m->nbr_text > m->nbr_max_text) {
         endwin();
         printf("Erreur le menu est trop petit !");
@@ -34,10 +42,13 @@ void addTextbox(menu* m, int x, int y, char* text){
     }
     
 	textbox t;
+
 	t.x = x;
 	t.y = y;
+
 	t.text = malloc(sizeof(char)* strlen(text)+1);
     strcpy(t.text, text);
+
 	t.id = m->nbr_text-1;
 	m->texts[m->nbr_text-1] = t;
 }
@@ -50,6 +61,8 @@ onclick est une fonction
 */
 void addbutton(menu* m, int x, int y, char* label, void (*onclick)(int, void*)){
 	m->nbr = (m->nbr)+1;
+
+    //Erreur en cas de dépassement de tableau 
     if(m->nbr > m->nbr_max) {
         endwin();
         printf("Erreur le menu est trop petit !");
@@ -57,14 +70,19 @@ void addbutton(menu* m, int x, int y, char* label, void (*onclick)(int, void*)){
     }
     
 	button b;
+
 	b.x = x;
 	b.y = y;
+
 	b.label = malloc(sizeof(char)* strlen(label) + 1);
     strcpy(b.label, label);
+
 	b.onclick = onclick;
+    
 	b.id = m->nbr-1;
 	m->buttons[m->nbr-1] = b;
 }
+
 // Change le label d'un boutton gestion de la mémoire dynamique
 void setlabel(button* b, char* label){
     char* old = b->label;
@@ -73,6 +91,7 @@ void setlabel(button* b, char* label){
     b->label = new_label;
     free(old);
 }
+
 // Affiche le menu pris en argument
 // Nécessite l'initialisation préalable de NCURSES
 void display(menu m){
