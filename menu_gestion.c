@@ -37,7 +37,7 @@ void addTextbox(menu* m, int x, int y, char* text){
     //Erreur en cas de dépassement de tableau
     if(m->nbr_text > m->nbr_max_text) {
         endwin();
-        printf("Erreur le menu est trop petit !");
+        printf("Dépassement de tableau ! Horreur !");
         exit(666);
     }
     
@@ -65,7 +65,7 @@ void addbutton(menu* m, int x, int y, char* label, void (*onclick)(int, void*)){
     //Erreur en cas de dépassement de tableau 
     if(m->nbr > m->nbr_max) {
         endwin();
-        printf("Erreur le menu est trop petit !");
+        printf("Dépassement de tableau ! Horreur !");
         exit(666);
     }
     
