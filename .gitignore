@@ -3,7 +3,5 @@ tetris
 grille
 *.log
 *.json
+keybind.bin
 *.o
-*.o
-*.o
-*.bin
