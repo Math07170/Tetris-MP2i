@@ -450,7 +450,7 @@ int nettoie_lignes(int grille[20][10]){
 				ligne_pleine = false;
 			}
 		}
-		if(ligne_pleine == true){			// ...et si oui, la supprime en faisant descendre d'une ligne les lignes supérieures
+		if(ligne_pleine){			// ...et si oui, la supprime en faisant descendre d'une ligne les lignes supérieures
 			lignes_supprimees++;
 			for(int k = i; k > 0; k--){
 				for(int l = 0; l < 10; l++){
